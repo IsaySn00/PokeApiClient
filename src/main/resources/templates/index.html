@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<!--
+Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+Click nbfs://nbhost/SystemFileSystem/Templates/Other/html.html to edit this template
+-->
+<html xmlns:th="http://www.thymeleaf.org" 
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout}">
+    <div class="container py-5" layout:fragment="contenido">
+        <style>
+            .pokemon-card{
+                border:none;
+                border-radius: 15px;
+                background: white;
+                transition: all 0.3 ease;
+                box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+                overflow: hidden;
+                cursor: pointer;
+            }
+
+            .pokemon-card:hover{
+                transform: translateY(-5px);
+                box-shadow: 0 10px 20px rgba(0,0,0,0.15);
+            }
+
+            .card-img-container{
+                background-color: #f0f0f0;
+                padding: 20px;
+                text-align: center;
+                border-bottom: 1px solid #e0e0e0;
+            }
+
+            .pokemon-img{
+                width: 120px;
+                height: 120px;
+                object-fit: contain;
+                filter: drop-shadow(0 5px 5px rgba(0,0,0,0.2));
+            }
+
+            .card-body{
+                text-align: center;
+            }
+
+            .pokemon-id{
+                color: #999;
+                font-size: 0.9rem;
+                font-weight: 600;
+            }
+
+            .pokemon-name{
+                font-weight: bold;
+                font-size: 1.2rem;
+                color: #333;
+                text-transform: capitalize;
+                margin-bottom: 5px;
+            }
+        </style>
+
+        <div class="row mb-4">
+            <div class="col-12 text-center">
+                <h2 class="fw-bold text-secondary">Selecciona tu Pokémon</h2>
+                <p class="text-muted">Explora la lista de Pokémon descubiertos</p>
+            </div>
+        </div>
+
+        <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-4">
+            <div th:each="pokemon : ${pokemons}" class="col">
+                <div class="card pokemon-card h-100">
+                    <div class="card-img-container">
+                        <img class="pokemon-img" th:src="${pokemon.imageUrl}"  alt="imagen de pokémon"/>
+                    </div>
+                    <div class="card-body">
+                        <p class="pokemon-id"></p>
+                        <h5 class="pokemon-name" th:text="${pokemon.name}"></h5>
+                        <!--                        <div class="mt-2">
+                                                    <span class="badge badge-type bg-grass text-white"></span>
+                                                </div>-->
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row mt-4">
+            <div class="col text-center">
+                <a th:if="${hasPrevious}" th:href="@{/pokemon(page=${currentPage - 1})}" class="btn btn-outline-secondary me-2">
+                    Anterior
+                </a>
+
+                <span class="fw-bold mx-2">
+                    <span th:text="${currentPage}"></span>
+                </span>
+
+                <a th:if="${hasNext}" th:href="@{/pokemon(page=${currentPage + 1})}" class="btn btn-outline-secondary me-2">
+                    Siguiente
+                </a>  
+            </div>
+        </div>
+    </div>
+</html>
