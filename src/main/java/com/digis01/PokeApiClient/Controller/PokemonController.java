@@ -40,6 +40,9 @@ public class PokemonController {
         model.addAttribute("currentPage", page);
         model.addAttribute("hasNext", data.get("hasNext"));
         model.addAttribute("hasPrevious", data.get("hasPrevious"));
+        model.addAttribute("totalPages", data.get("totalPages"));
+        model.addAttribute("startPage", data.get("startPage"));
+        model.addAttribute("endPage", data.get("endPage"));
         
         return "index";
     }

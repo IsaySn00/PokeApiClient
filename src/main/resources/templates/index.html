@@ -85,8 +85,13 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/html.html to edit this temp
                     Anterior
                 </a>
 
-                <span class="fw-bold mx-2">
-                    <span th:text="${currentPage}"></span>
+                <span th:each="pageNum : ${#numbers.sequence(startPage, endPage)}">
+                    <a 
+                        th:href="@{/pokemon(page=${pageNum})}" 
+                        th:text="${pageNum}"
+                        th:classappend="${pageNum == currentPage} ? 'btn-primary' : 'btn-outline-secondary'"
+                        class="btn mx-1"
+                        ></a>
                 </span>
 
                 <a th:if="${hasNext}" th:href="@{/pokemon(page=${currentPage + 1})}" class="btn btn-outline-secondary me-2">
