@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<!--
+Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+Click nbfs://nbhost/SystemFileSystem/Templates/Other/html.html to edit this template
+-->
+<html xmlns:th="http://www.thymeleaf.org" 
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout}">
+    <div class="container" layout:fragment="contenido">
+        <style>
+            .card-registro{
+                border: none;
+                border-radius: 20px;
+                box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+                overflow: hidden;
+            }
+            
+            .card-header{
+                background-color: #ff3e3e;
+                color: white;
+                text-align: center;
+                padding: 20px;
+                border-bottom: none;
+            }
+            
+            btn-register{
+                background-color: #3b4cca;
+                border: none;
+                padding: 12px;
+                font-weight: bold;
+                font-size: 1.1rem;
+                transition: background 0.3s;
+            }
+            
+            btn-register:hover{
+                background-color: #2a3990;
+            }
+            
+            .form-floating > label{
+                padding-left: 15px;
+            }
+        </style>
+        <div class="row justify-content-center mt-3">
+            <div class="col-lg-8 col-md-10">
+                <div class="card card-registro">
+                    <div class="card-header">
+                        <h3 class="mb-0"><i class="bi bi-person-badge"></i> Registro de Usuario</h3>
+                    </div>
+
+                    <div class="card-body p-4 p-md-5">
+                        <form method="post" th:object="${usuario}" th:action="@{add}">
+                            <h5 class="text-muted mb-3 fs-6 text-uppercase ls-1">Datos personales</h5>
+
+                            <div class="row g-3 mb-3">
+                                <div class="col-md-4">
+                                    <div class="form-floating">
+                                        <input type="text" th:field="*{nombreUsuario}" class="form-control" id="nombre" placeholder="Nombre" required/>
+                                        <label for="nombre">Nombre</label>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-floating">
+                                        <input type="text" th:field="*{apellidoPatUsuario}" class="form-control" id="apPaterno" placeholder="Ap. Paterno" required/>
+                                        <label for="nombre">Apellido Paterno</label>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-floating">
+                                        <input type="text" th:field="*{apellidoMatUsuario}" class="form-control" id="apMaterno" placeholder="Ap. Materno" required/>
+                                        <label for="nombre">Apellido Materno</label>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-floating">
+                                        <input type="date" class="form-control" id="fechaNac" required/>
+                                        <label for="fechaNac">Fecha de Nacimiento</label>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-floating">
+                                        <input type="text" class="form-control" id="telefono" placeholder="Teléfono" required/>
+                                        <label for="telefono">Teléfono</label>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <hr class="my-4">
+                            <h5 class="text-muted mb-3 fs-6 text-uppercase">Datos de Cuenta</h5>
+
+                            <div class="row g-3 mb-3">
+                                <div class="col-md-12">
+                                    <div class="input-group">
+                                        <span class="input-group-text bg-light"><i class="bi bi-at"></span>
+                                        <div class="form-floating flex-grow-1">
+                                            <input type="text" class="form-control" id="username" placeholder="Usuario" required>
+                                            <label for="username">Nombre de Usuario</label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row g-3 mb-4">
+                                <div class="col-md-6">
+                                    <div class="form-floating">
+                                        <input type="email" class="form-control" id="email" placeholder="correo@ejemplo.com" required>
+                                        <label for="email">Correo Electrónico</label>
+                                    </div>
+                                    <div class="form-floating">
+                                        <input type="password" class="form-control" id="password" placeholder="Contraseña" required>
+                                        <label for="email">Contraseña</label>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="d-grip gap-2">
+                                <button type="submit" class="btn btn-primary btn-register btn-lg text-white rounded-pill shadow-sm">
+                                    Registrarse
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</html>
