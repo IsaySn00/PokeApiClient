@@ -1,5 +1,7 @@
 package com.digis01.PokeApiClient.ML;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 
 public class Usuario {
 
@@ -18,7 +20,8 @@ public class Usuario {
     private String emailUsuario;
     
     private String passwordUsuario;
-
+    
+    @JsonProperty("RolJPA")
     public Rol Rol;
 
     public int getIdUsuario() {

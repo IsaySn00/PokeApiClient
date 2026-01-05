@@ -14,7 +14,7 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/html.html to edit this temp
                 box-shadow: 0 10px 25px rgba(0,0,0,0.1);
                 overflow: hidden;
             }
-            
+
             .card-header{
                 background-color: #ff3e3e;
                 color: white;
@@ -22,7 +22,7 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/html.html to edit this temp
                 padding: 20px;
                 border-bottom: none;
             }
-            
+
             btn-register{
                 background-color: #3b4cca;
                 border: none;
@@ -31,11 +31,11 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/html.html to edit this temp
                 font-size: 1.1rem;
                 transition: background 0.3s;
             }
-            
+
             btn-register:hover{
                 background-color: #2a3990;
             }
-            
+
             .form-floating > label{
                 padding-left: 15px;
             }
@@ -72,13 +72,7 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/html.html to edit this temp
                                 </div>
                                 <div class="col-md-4">
                                     <div class="form-floating">
-                                        <input type="date" class="form-control" id="fechaNac" required/>
-                                        <label for="fechaNac">Fecha de Nacimiento</label>
-                                    </div>
-                                </div>
-                                <div class="col-md-4">
-                                    <div class="form-floating">
-                                        <input type="text" class="form-control" id="telefono" placeholder="Teléfono" required/>
+                                        <input type="text" class="form-control" th:field="*{telefonoUsuario}" id="telefono" placeholder="Teléfono" required/>
                                         <label for="telefono">Teléfono</label>
                                     </div>
                                 </div>
@@ -90,9 +84,8 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/html.html to edit this temp
                             <div class="row g-3 mb-3">
                                 <div class="col-md-12">
                                     <div class="input-group">
-                                        <span class="input-group-text bg-light"><i class="bi bi-at"></span>
                                         <div class="form-floating flex-grow-1">
-                                            <input type="text" class="form-control" id="username" placeholder="Usuario" required>
+                                            <input type="text" th:field="*{userName}" class="form-control" id="username" placeholder="Usuario" required>
                                             <label for="username">Nombre de Usuario</label>
                                         </div>
                                     </div>
@@ -102,11 +95,13 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/html.html to edit this temp
                             <div class="row g-3 mb-4">
                                 <div class="col-md-6">
                                     <div class="form-floating">
-                                        <input type="email" class="form-control" id="email" placeholder="correo@ejemplo.com" required>
+                                        <input type="email" th:field="*{emailUsuario}" class="form-control" id="email" placeholder="correo@ejemplo.com" required>
                                         <label for="email">Correo Electrónico</label>
                                     </div>
+                                </div>
+                                <div class="col-md-6">
                                     <div class="form-floating">
-                                        <input type="password" class="form-control" id="password" placeholder="Contraseña" required>
+                                        <input type="password" th:field="*{passwordUsuario}" class="form-control" id="password" placeholder="Contraseña" required>
                                         <label for="email">Contraseña</label>
                                     </div>
                                 </div>

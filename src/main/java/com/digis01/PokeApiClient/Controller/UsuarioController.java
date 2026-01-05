@@ -1,6 +1,7 @@
 package com.digis01.PokeApiClient.Controller;
 
 import com.digis01.PokeApiClient.ML.Result;
+import com.digis01.PokeApiClient.ML.Rol;
 import com.digis01.PokeApiClient.ML.Usuario;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -36,6 +37,11 @@ public class UsuarioController {
     @PostMapping("add")
     public String AddUsuario(@ModelAttribute("Usuario") Usuario usuario, RedirectAttributes redirectAttributes) {
         Result result = new Result();
+        
+        Rol rol = new Rol();
+
+        rol.setIdRol(2);
+        usuario.setRol(rol);
 
         RestTemplate restTemplate = new RestTemplate();
 
@@ -54,6 +60,6 @@ public class UsuarioController {
         redirectAttributes.addFlashAttribute("sucess", "EL usuario" + usuario.getUserName() + "Se creo con exito");
         redirectAttributes.addFlashAttribute("icon", "success");
 
-        return "redirect:/pokemon/index";
+        return "redirect:/pokemon";
     }
 }
