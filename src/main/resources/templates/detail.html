@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<!--
+Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+Click nbfs://nbhost/SystemFileSystem/Templates/Other/html.html to edit this template
+-->
+<html xmlns:th="http://www.thymeleaf.org" 
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout}">
+    <div class="container py-5" layout:fragment="contenido">
+        <style>
+            .pokemon-card{
+                border:none;
+                border-radius: 15px;
+                background: white;
+                transition: all 0.3 ease;
+                box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+                overflow: hidden;
+                cursor: pointer;
+            }
+
+            .pokemon-card:hover{
+                transform: translateY(-5px);
+                box-shadow: 0 10px 20px rgba(0,0,0,0.15);
+            }
+
+            .card-img-container{
+                background-color: #f0f0f0;
+                padding: 20px;
+                text-align: center;
+                border-bottom: 1px solid #e0e0e0;
+            }
+
+            .pokemon-img{
+                width: 4000px;
+                height: 400px;
+                object-fit: contain;
+                filter: drop-shadow(0 5px 5px rgba(0,0,0,0.2));
+            }
+
+            .card-body{
+                text-align: center;
+            }
+
+            .pokemon-id{
+                color: #999;
+                font-size: 0.9rem;
+                font-weight: 600;
+            }
+
+            .pokemon-name{
+                font-weight: bold;
+                font-size: 1.2rem;
+                color: #333;
+                text-transform: capitalize;
+                margin-bottom: 5px;
+            }
+        </style>
+        <div class="row mb-4">
+            <div class="col-12 text-center">
+                <h2 class="fw-bold text-secondary">Detalle Pokémon</h2>
+                <p class="text-muted">Características principales del Pokémon</p>
+            </div>
+        </div>
+
+        <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-2 g-2">
+            <div class="card pokemon-card h-100">
+                <div class="card-img-container">
+                    <div id="carouselExampleRide" class="carousel slide" data-bs-ride="true">
+                        <div class="carousel-indicators">
+                            <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
+                            <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="1" aria-label="Slide 2"></button>
+                            <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="2" aria-label="Slide 3"></button>
+                            <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="2" aria-label="Slide 4"></button>
+                        </div>
+                        <div class="carousel-inner">
+                            <div class="carousel-item active">
+                                <img th:src="${pokemon.sprites.other['showdown'].front_default}" class="d-block w-100 pokemon-img" alt="...">
+                            </div>
+                            <div class="carousel-item">
+                                <img th:src="${pokemon.sprites.other['showdown'].front_shiny}" class="d-block w-100 pokemon-img" alt="...">
+                            </div>
+                            <div class="carousel-item">
+                                <img th:src="${pokemon.sprites.other['showdown'].back_default}" class="d-block w-100 pokemon-img" alt="...">
+                            </div>
+                            <div class="carousel-item">
+                                <img th:src="${pokemon.sprites.other['showdown'].back_shiny}" class="d-block w-100 pokemon-img" alt="...">
+                            </div>
+                        </div>
+                        <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleRide" data-bs-slide="prev">
+                            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                            <span class="visually-hidden">Previous</span>
+                        </button>
+                        <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleRide" data-bs-slide="next">
+                            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                            <span class="visually-hidden">Next</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card pokemon-card h-100">
+                <div class="card-body">
+                    <p class="pokemon-id"></p>
+                    <h5 class="pokemon-name" th:text="${pokemon.nombre}"></h5>
+                    <br>
+                    <p>Peso: <span th:text="${pokemon.height}" />kg</p>
+                    <p>Altura: <span th:text="${pokemon.weight}" />cm</p>
+                    <p>Experiencia: <span th:text="${pokemon.base_experince}" /></p>
+                </div>
+                <br>
+                <h3 class="fw-bold text-secondary" style="text-align: center">Tipos</h3>
+                <br>
+                <div class="card pokemon-card h-100">
+                    <div class="card-body">
+                        <div th:each="types : ${pokemon.types}">
+                                
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <br>
+        <h3 class="fw-bold text-secondary" style="text-align: center">Habilidades</h3>
+        <br>
+        <div class="card pokemon-card h-100">
+            <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-4">
+                <div th:each="pa : ${pokemon.abilities}" class="col">
+                    <div class="card-body">
+                        <p class="pokemon-id"></p>
+                        <p>Habilidad: <span th:text="${pa.ability.name}" /></p>
+                        <p>Habilidad oculta: <span th:text="${pa.is_hidden}" /></p>
+                        <p>Efecto:  <span th:text="${pa.abilityDetail?.effect_entries}"></span></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+</html>
