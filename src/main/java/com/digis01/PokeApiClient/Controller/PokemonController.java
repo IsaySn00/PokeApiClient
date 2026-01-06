@@ -20,24 +20,25 @@ import org.springframework.web.client.RestTemplate;
 @Controller
 @RequestMapping("/pokemon")
 public class PokemonController {
-    
+
     private final String urlBase = "http://localhost:8080/api/pokemon";
 
     @GetMapping()
-    public String Index(@RequestParam(defaultValue = "1") int page,Model model){
-        
+    public String Index(@RequestParam(defaultValue = "1") int page, Model model) {
+
         RestTemplate restTemplate = new RestTemplate();
-        
+
         ResponseEntity<Result<Map<String, Object>>> responseEntity = restTemplate.exchange(
                 urlBase + "?page=" + page,
                 HttpMethod.GET,
                 HttpEntity.EMPTY,
-                new ParameterizedTypeReference<Result<Map<String, Object>>>(){});
-        
+                new ParameterizedTypeReference<Result<Map<String, Object>>>() {
+        });
+
         Result<Map<String, Object>> result = responseEntity.getBody();
-        
+
         Map<String, Object> data = result.object;
-        
+
         model.addAttribute("pokemons", data.get("pokemons"));
         model.addAttribute("currentPage", page);
         model.addAttribute("hasNext", data.get("hasNext"));
@@ -45,35 +46,27 @@ public class PokemonController {
         model.addAttribute("totalPages", data.get("totalPages"));
         model.addAttribute("startPage", data.get("startPage"));
         model.addAttribute("endPage", data.get("endPage"));
-        
+
         return "index";
     }
-    
+
     @GetMapping("detail/{id}")
-    public String Detail(@PathVariable("id") int Id_Pokemon, Model model){
-         RestTemplate restTemplate = new RestTemplate();
-        ResponseEntity<Result<Map<String, Object>>> responseEntity = restTemplate.exchange(
-                urlBase + "/detail/" + Id_Pokemon,
+    public String Detail(@PathVariable("id") int Id_Pokemon, Model model) {
+        
+        RestTemplate restTemplate = new RestTemplate();
+        
+        ResponseEntity<Result<PokemonDetail>> responseEntity = restTemplate.exchange(
+                urlBase + "/" + Id_Pokemon,
                 HttpMethod.GET,
                 HttpEntity.EMPTY,
-                new ParameterizedTypeReference<Result<Map<String, Object>>>(){});
+                new ParameterizedTypeReference<Result<PokemonDetail>>() {
+        });
+
+        Result result = responseEntity.getBody();
         
-        if(responseEntity.getStatusCode().value() == 200){
-            //Result result = responseEntity.getBody();
-            Result<Map<String, Object>> result = responseEntity.getBody();
-            Map<String, Object> data = result.object;
-            model.addAttribute("pokemon", result.object);
-            model.addAttribute("abilities", "abilities");
-            model.addAttribute("sprites", "sprites");
-            model.addAttribute("types", "types");
-        }else{
-            return "Error";
-        }
+        model.addAttribute("pokemon", result.object);
+        
         return "detail";
     }
-    
-//    @GetMapping()
-//    public String Detail(){
-//        return "detail";
-//    }
+
 }

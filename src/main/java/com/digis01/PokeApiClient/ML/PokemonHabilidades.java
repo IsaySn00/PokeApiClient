@@ -10,20 +10,21 @@ import java.util.Map;
 public class PokemonHabilidades {
     private boolean is_hidden;
     private int slot;
-    Map<String, String> ability = new HashMap<>();
+    private NamedApiResource ability;
+    
+    private PokemonHabilidadDetail abilityDetail;
     
     public PokemonHabilidades(){
     
     }
     
-    public PokemonHabilidades(boolean is_hidden, int slot){
+    public PokemonHabilidades(boolean is_hidden, int slot, NamedApiResource ability){
         this.is_hidden = is_hidden;
         this.slot = slot;
-        ability.put("name", "");
-        ability.put("url", "");
+        this.ability = ability;
     }
 
-    public boolean isIs_hidden() {
+    public boolean getIs_hidden() {
         return is_hidden;
     }
 
@@ -39,12 +40,20 @@ public class PokemonHabilidades {
         this.slot = slot;
     }
 
-    public Map<String, String> getAbility() {
+    public NamedApiResource getAbility() {
         return ability;
     }
 
-    public void setAbility(Map<String, String> ability) {
+    public void setAbility(NamedApiResource ability) {
         this.ability = ability;
+    }
+
+    public PokemonHabilidadDetail getAbilityDetail() {
+        return abilityDetail;
+    }
+
+    public void setAbilityDetail(PokemonHabilidadDetail abilityDetail) {
+        this.abilityDetail = abilityDetail;
     }
     
 }

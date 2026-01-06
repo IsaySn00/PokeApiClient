@@ -10,10 +10,10 @@ import java.util.List;
 public class PokemonDetail {
     private int id;
     private String name;
-    private int base_experince;
+    private int base_experience;
     private int height;
     private int weight;
-    public List<PokemonHabilidades> abilities = new ArrayList<>();
+    public List<PokemonHabilidades> abilities;
     public List<PokemonTipos> types = new ArrayList<>();
 //    Map<String, Object> sprites = new HashMap<>();
     public PokemonSprites sprites;
@@ -25,7 +25,7 @@ public class PokemonDetail {
     public PokemonDetail(int id, String name, int base_experience, int height, int weight){
         this.id = id;
         this.name = name;
-        this.base_experince = base_experience;
+        this.base_experience = base_experience;
         this.height = height;
         this.weight = weight;
 //        sprites.put("back_default", "");
@@ -42,28 +42,28 @@ public class PokemonDetail {
 //        sprites.remove("showdown");
     }
 
-    public int getId_Pokemon() {
+    public int getId() {
         return id;
     }
 
-    public void setId_Pokemon(int id) {
+    public void setId(int id) {
         this.id = id;
     }
 
-    public String getNombre() {
+    public String getName() {
         return name;
     }
 
-    public void setNombre(String name) {
+    public void setName(String name) {
         this.name = name;
     }
 
-    public int getBase_experince() {
-        return base_experince;
+    public int getBase_experience() {
+        return base_experience;
     }
 
-    public void setBase_experince(int base_experince) {
-        this.base_experince = base_experince;
+    public void setBase_experience(int experience) {
+        this.base_experience = experience;
     }
 
     public int getHeight() {
@@ -82,11 +82,27 @@ public class PokemonDetail {
         this.weight = weight;
     }
 
-//    public Map<String, Object> getSprites() {
-//        return sprites;
-//    }
-//
-//    public void setSprites(Map<String, Object> sprites) {
-//        this.sprites = sprites;
-//    }
+    public List<PokemonHabilidades> getAbilities() {
+        return abilities;
+    }
+
+    public void setAbilities(List<PokemonHabilidades> abilities) {
+        this.abilities = abilities;
+    }
+
+    public List<PokemonTipos> getTypes() {
+        return types;
+    }
+
+    public void setTypes(List<PokemonTipos> types) {
+        this.types = types;
+    }
+
+    public PokemonSprites getSprites() {
+        return sprites;
+    }
+
+    public void setSprites(PokemonSprites sprites) {
+        this.sprites = sprites;
+    }
 }

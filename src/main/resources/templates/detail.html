@@ -74,16 +74,16 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/html.html to edit this temp
                         </div>
                         <div class="carousel-inner">
                             <div class="carousel-item active">
-                                <img th:src="${pokemon.sprites.other['showdown'].front_default}" class="d-block w-100 pokemon-img" alt="...">
+                                <img th:src="${pokemon.sprites.front_default}" class="d-block w-100 pokemon-img" alt="...">
                             </div>
                             <div class="carousel-item">
-                                <img th:src="${pokemon.sprites.other['showdown'].front_shiny}" class="d-block w-100 pokemon-img" alt="...">
+                                <img th:src="${pokemon.sprites.front_shiny}" class="d-block w-100 pokemon-img" alt="...">
                             </div>
                             <div class="carousel-item">
-                                <img th:src="${pokemon.sprites.other['showdown'].back_default}" class="d-block w-100 pokemon-img" alt="...">
+                                <img th:src="${pokemon.sprites.back_default}" class="d-block w-100 pokemon-img" alt="...">
                             </div>
                             <div class="carousel-item">
-                                <img th:src="${pokemon.sprites.other['showdown'].back_shiny}" class="d-block w-100 pokemon-img" alt="...">
+                                <img th:src="${pokemon.sprites.back_shiny}" class="d-block w-100 pokemon-img" alt="...">
                             </div>
                         </div>
                         <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleRide" data-bs-slide="prev">
@@ -101,20 +101,20 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/html.html to edit this temp
             <div class="card pokemon-card h-100">
                 <div class="card-body">
                     <p class="pokemon-id"></p>
-                    <h5 class="pokemon-name" th:text="${pokemon.nombre}"></h5>
+                    <h5 class="pokemon-name" th:text="${pokemon.name}"></h5>
                     <br>
                     <p>Peso: <span th:text="${pokemon.height}" />kg</p>
                     <p>Altura: <span th:text="${pokemon.weight}" />cm</p>
-                    <p>Experiencia: <span th:text="${pokemon.base_experince}" /></p>
+                    <p>Experiencia: <span th:text="${pokemon.base_experience}" /></p>
                 </div>
                 <br>
                 <h3 class="fw-bold text-secondary" style="text-align: center">Tipos</h3>
                 <br>
                 <div class="card pokemon-card h-100">
                     <div class="card-body">
-                        <div th:each="types : ${pokemon.types}">
+<!--                        <div th:each="types : ${pokemon.types}">
                                 
-                        </div>
+                        </div>-->
                     </div>
                 </div>
             </div>
@@ -130,7 +130,7 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/html.html to edit this temp
                         <p class="pokemon-id"></p>
                         <p>Habilidad: <span th:text="${pa.ability.name}" /></p>
                         <p>Habilidad oculta: <span th:text="${pa.is_hidden}" /></p>
-                        <p>Efecto:  <span th:text="${pa.abilityDetail?.effect_entries}"></span></p>
+<!--                        <p>Efecto:  <span th:text="${pa.abilityDetail?.effect_entries}"></span></p>-->
                     </div>
                 </div>
             </div>
