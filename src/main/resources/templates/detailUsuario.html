@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<!--
+Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+Click nbfs://nbhost/SystemFileSystem/Templates/Other/html.html to edit this template
+-->
+<html xlmns:th="http://thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout}">
+    <div class="container" layout:fragment="contenido">
+        <style>
+            .profile-card{
+                border: none;
+                border-radius: 15px;
+                overflow: hidden;
+                box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+            }
+            
+            .profile-header-bg{
+                height: 130px;
+                background: linear-gradient(135deg, #ff3e3e 0%, #ff9f43 100%);
+            }
+            
+            .avatar-container{
+                margin-top: -70px;
+                text-align: center;
+            }
+            
+            .profile-img{
+                width: 140px;
+                height: 140px;
+                object-fit: cover;
+                border-radius: 50%;
+                border: 5px solid white;
+                box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+                background-color: #fff;
+            }
+            
+            .user-handle{
+                color: #6c757d;
+                font-weight: 500;
+            }
+            
+            .info-label{
+                font-size: 0.85rem;
+                text-transform: uppercase;
+                letter-spacing: 1px;
+                color: #adb5bd;
+                font-weight: 700;
+                margin-bottom: 5px;
+            }
+            
+            .info-value{
+                font-size: 1.1rem;
+                color: #212529;
+                font-weight: 500;
+                border-bottom: 1px solid #eee;
+                padding-bottom: 10px;
+                margin-bottom: 20px;
+            }
+            
+            .btn-edit{
+                border-radius: 50px;
+                padding: 8px 25px;
+            }
+        </style>
+        <div class="row justify-content-center mt-3">
+            <div class="col-lg-8">
+                <div class="card profile-card">
+                    <div class="profile-header-bg"></div>
+                    <div class="card-body p-4">
+                        <div class="row">
+                            <div class="col-md-4 text-center border-end-md">
+                                <div class="avatar-container mb-3">
+                                    <img src="https://cdn-icons-png.flaticon.com/512/4646/4646084.png" alt="Avatar" class="profile-img">
+                                </div>
+                                <h3 class="fw-bold mb-0"></h3>
+                                <p class="user-handle mb-4"></p>
+
+                                <div class="d-grip gap-2">
+                                    <button class="btn btn-outline-primary btn-edit btn-sm">
+                                        <i class="bi bi-pencil-square"></i> Editar Perfil
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="col-md-8 ps-md-5 pt-4 pt-md-0">
+                                <h5 class="mb-4 text-primary fw-bold"><i class="bi bi-card-heading"></i> Información del usuario</h5>
+
+                                <div class="row">
+                                    <div class="col-12">
+                                        <div class="info-label">Nombre</div>
+                                        <div class="info-value" th:text="${usuario.nombreUsuario}"></div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="info-label">Apellido Paterno</div>
+                                        <div class="info-value" th:text="${usuario.apellidoPatUsuario}"></div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="info-label">Apellido Materno</div>
+                                        <div class="info-value" th:text="${usuario.apellidoMatUsuario}"></div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="info-label">Teléfono</div>
+                                        <div class="info-value" th:text="${usuario.telefonoUsuario}"></div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="info-label">Correo Electrónico</div>
+                                        <div class="info-value" th:text="${usuario.emailUsuario}"></div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="info-label">Nombre de Usuario</div>
+                                        <div class="info-value" th:text="${usuario.userName}"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</html>

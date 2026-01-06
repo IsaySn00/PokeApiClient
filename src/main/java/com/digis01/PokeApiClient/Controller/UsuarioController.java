@@ -3,6 +3,7 @@ package com.digis01.PokeApiClient.Controller;
 import com.digis01.PokeApiClient.ML.Result;
 import com.digis01.PokeApiClient.ML.Rol;
 import com.digis01.PokeApiClient.ML.Usuario;
+import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -12,6 +13,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -61,5 +63,22 @@ public class UsuarioController {
         redirectAttributes.addFlashAttribute("icon", "success");
 
         return "redirect:/pokemon";
+    }
+    
+    @GetMapping("/{id}")
+    public String GetDetailUsuario(@PathVariable("id") int id, Model model){
+        
+        RestTemplate restTemplate = new RestTemplate();
+        
+        ResponseEntity<Result<Usuario>> responseEntity = restTemplate.exchange(
+                urlBase + "/" + id,
+                HttpMethod.GET,
+                HttpEntity.EMPTY,
+                new ParameterizedTypeReference<Result<Usuario>>(){});
+        
+        Result result = responseEntity.getBody();
+        model.addAttribute("usuario", result.object);
+        
+        return "detailUsuario";
     }
 }
