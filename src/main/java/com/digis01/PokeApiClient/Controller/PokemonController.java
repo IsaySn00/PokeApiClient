@@ -1,6 +1,7 @@
 package com.digis01.PokeApiClient.Controller;
 
 import com.digis01.PokeApiClient.ML.Pokemon;
+import com.digis01.PokeApiClient.ML.PokemonDetail;
 import com.digis01.PokeApiClient.ML.Result;
 import java.util.List;
 import java.util.Map;
@@ -11,6 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.client.RestTemplate;
@@ -18,24 +20,25 @@ import org.springframework.web.client.RestTemplate;
 @Controller
 @RequestMapping("/pokemon")
 public class PokemonController {
-    
+
     private final String urlBase = "http://localhost:8080/api/pokemon";
 
     @GetMapping()
-    public String Index(@RequestParam(defaultValue = "1") int page,Model model){
-        
+    public String Index(@RequestParam(defaultValue = "1") int page, Model model) {
+
         RestTemplate restTemplate = new RestTemplate();
-        
+
         ResponseEntity<Result<Map<String, Object>>> responseEntity = restTemplate.exchange(
                 urlBase + "?page=" + page,
                 HttpMethod.GET,
                 HttpEntity.EMPTY,
-                new ParameterizedTypeReference<Result<Map<String, Object>>>(){});
-        
+                new ParameterizedTypeReference<Result<Map<String, Object>>>() {
+        });
+
         Result<Map<String, Object>> result = responseEntity.getBody();
-        
+
         Map<String, Object> data = result.object;
-        
+
         model.addAttribute("pokemons", data.get("pokemons"));
         model.addAttribute("currentPage", page);
         model.addAttribute("hasNext", data.get("hasNext"));
@@ -43,7 +46,27 @@ public class PokemonController {
         model.addAttribute("totalPages", data.get("totalPages"));
         model.addAttribute("startPage", data.get("startPage"));
         model.addAttribute("endPage", data.get("endPage"));
-        
+
         return "index";
     }
+
+    @GetMapping("detail/{id}")
+    public String Detail(@PathVariable("id") int Id_Pokemon, Model model) {
+        
+        RestTemplate restTemplate = new RestTemplate();
+        
+        ResponseEntity<Result<PokemonDetail>> responseEntity = restTemplate.exchange(
+                urlBase + "/" + Id_Pokemon,
+                HttpMethod.GET,
+                HttpEntity.EMPTY,
+                new ParameterizedTypeReference<Result<PokemonDetail>>() {
+        });
+
+        Result result = responseEntity.getBody();
+        
+        model.addAttribute("pokemon", result.object);
+        
+        return "detail";
+    }
+
 }
