@@ -50,7 +50,7 @@ public class PokemonController {
         return "index";
     }
 
-    @GetMapping("detail/{id}")
+    @GetMapping("/detail/{id}")
     public String Detail(@PathVariable("id") int Id_Pokemon, Model model) {
         
         RestTemplate restTemplate = new RestTemplate();

@@ -66,7 +66,7 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/html.html to edit this temp
         <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-4">
             <div th:each="pokemon : ${pokemons}" class="col">
                 <div class="card pokemon-card h-100">
-                    <a th:href="@{/pokemon/detail/{id}(id = ${pokemon['idPokemon']})}">
+                    <a th:href="@{/pokemon/detail/{id}(id = ${pokemon.id})}">
                         <div class="card-img-container">
                             <img class="pokemon-img" th:src="${pokemon.imageUrl}"  alt="imagen de pokémon"/>
                         </div>
