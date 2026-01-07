@@ -4,6 +4,7 @@ import com.digis01.PokeApiClient.ML.Pokemon;
 import com.digis01.PokeApiClient.ML.PokemonDetail;
 import com.digis01.PokeApiClient.ML.Result;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import org.springframework.core.ParameterizedTypeReference;
@@ -53,48 +54,40 @@ public class PokemonController {
 
     @GetMapping("detail/{id}")
     public String Detail(@PathVariable("id") int Id_Pokemon, Model model) {
-        
+
         RestTemplate restTemplate = new RestTemplate();
-        
+
         ResponseEntity<Result<PokemonDetail>> responseEntity = restTemplate.exchange(
                 urlBase + "/" + Id_Pokemon,
                 HttpMethod.GET,
                 HttpEntity.EMPTY,
                 new ParameterizedTypeReference<Result<PokemonDetail>>() {
         });
-        
-        
+
         Result result = responseEntity.getBody();
-        
+
         model.addAttribute("pokemon", result.object);
-        
+
         return "detail";
     }
-    
+
     @GetMapping("/realizar-busqueda")
-    public String Buscador(@RequestParam("name")String name, Model model){
+    public String Buscador(@RequestParam("name") String name, Model model) {
         RestTemplate restTemplate = new RestTemplate();
-        
+
         ResponseEntity<Result<Map<String, Object>>> responseEntity = restTemplate.exchange(
                 urlBase + "/buscador?name=" + name,
                 HttpMethod.GET,
                 HttpEntity.EMPTY,
                 new ParameterizedTypeReference<Result<Map<String, Object>>>() {
         });
-        
-         Result<Map<String, Object>> result = responseEntity.getBody();
+
+        Result<Map<String, Object>> result = responseEntity.getBody();
 
         Map<String, Object> data = result.object;
-        Object resultado = data.get("pokemons");
-        List<Object> listaResultado = new ArrayList<>(); 
-        
-        if(resultado instanceof List){
-            listaResultado = (List<Object>) resultado;
-        }else{
-            listaResultado.add(resultado);
-        }
 
-        model.addAttribute("pokemons", listaResultado);
+        model.addAttribute("pokemons", Collections.singleton(data));
+
         model.addAttribute("startPage", 1);
         model.addAttribute("endPage", 1);
 
