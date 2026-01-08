@@ -3,6 +3,8 @@ package com.digis01.PokeApiClient.Controller;
 import com.digis01.PokeApiClient.ML.Result;
 import com.digis01.PokeApiClient.ML.Rol;
 import com.digis01.PokeApiClient.ML.Usuario;
+import jakarta.servlet.http.HttpSession;
+import java.util.Map;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -17,6 +19,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
@@ -24,7 +27,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 @RequestMapping("/usuario")
 public class UsuarioController {
 
-    private final String urlBase = "http://localhost:8080/api/usuario";
+    private final String urlBase = "http://localhost:8080/api/";
 
     @GetMapping("registroUsuario")
     public String AddUsuario(Model model) {
@@ -54,7 +57,7 @@ public class UsuarioController {
         HttpEntity entity = new HttpEntity<>(usuario, httpHeader);
 
         ResponseEntity<Result> responseEntity = restTemplate.exchange(
-                urlBase,
+                urlBase + "usuario",
                 HttpMethod.POST,
                 entity,
                 Result.class);
@@ -71,7 +74,7 @@ public class UsuarioController {
         RestTemplate restTemplate = new RestTemplate();
         
         ResponseEntity<Result<Usuario>> responseEntity = restTemplate.exchange(
-                urlBase + "/" + id,
+                urlBase + "/usuario/" + id,
                 HttpMethod.GET,
                 HttpEntity.EMPTY,
                 new ParameterizedTypeReference<Result<Usuario>>(){});
@@ -80,5 +83,49 @@ public class UsuarioController {
         model.addAttribute("usuario", result.object);
         
         return "detailUsuario";
+    }
+    
+    @GetMapping("/login")
+    public String Login(){
+        return "login";
+    }
+    
+    @PostMapping("/login")
+    public String Login(@RequestParam("email") String email, @RequestParam("password") String password, Model model, HttpSession session){
+        
+        try{
+            Usuario usuario = new Usuario();
+            usuario.setEmailUsuario(email);
+            usuario.setPasswordUsuario(password);
+            
+            RestTemplate restTemplate = new RestTemplate();
+            
+            HttpHeaders header = new HttpHeaders();
+            
+            header.setContentType(MediaType.APPLICATION_JSON);
+            
+            HttpEntity<Usuario> entity = new HttpEntity<>(usuario, header);
+            
+            ResponseEntity<Result<Map<String, Object>>> responseEntity = restTemplate.exchange(
+                    urlBase + "auth/login", 
+                    HttpMethod.POST,
+                    entity,
+                    new ParameterizedTypeReference<Result<Map<String, Object>>>(){});
+            
+            Map<String, Object> data = responseEntity.getBody().object;
+            
+            String rol = data.get("rol").toString();
+            Integer idUsuario = (Integer) data.get("idUsuario");
+            String tkn = data.get("token").toString();
+            
+            session.setAttribute("tkn", tkn);
+            session.setAttribute("role", rol);
+            
+            return "redirect:/pokemon";
+            
+        }catch(Exception ex){
+            model.addAttribute("error", true);
+            return "redirect:/usuario/login";
+        }
     }
 }
