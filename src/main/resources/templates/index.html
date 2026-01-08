@@ -7,6 +7,7 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/html.html to edit this temp
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="~{layout}">
     <div class="container py-5" layout:fragment="contenido">
+        
         <style>
             .pokemon-card{
                 border:none;
@@ -101,5 +102,14 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/html.html to edit this temp
                 </a>  
             </div>
         </div>
+        <script th:inline="javascript">
+            $(document).ready(function () {
+                                
+                if(sessionStorage.getItem("tokenUser") == null){
+                    sessionStorage.setItem("tokenUser", /*[[${session.tkn}]]*/ '')
+                }
+                
+            })
+        </script>
     </div>
 </html>

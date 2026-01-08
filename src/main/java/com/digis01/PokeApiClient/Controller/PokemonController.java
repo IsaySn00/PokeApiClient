@@ -3,10 +3,12 @@ package com.digis01.PokeApiClient.Controller;
 import com.digis01.PokeApiClient.ML.Pokemon;
 import com.digis01.PokeApiClient.ML.PokemonDetail;
 import com.digis01.PokeApiClient.ML.Result;
+import jakarta.servlet.http.HttpSession;
 import java.util.List;
 import java.util.Map;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -24,14 +26,22 @@ public class PokemonController {
     private final String urlBase = "http://localhost:8080/api/pokemon";
 
     @GetMapping()
-    public String Index(@RequestParam(defaultValue = "1") int page, Model model) {
+    public String Index(@RequestParam(defaultValue = "1") int page, Model model, HttpSession session) {
 
         RestTemplate restTemplate = new RestTemplate();
+        
+        String tkn = (String) session.getAttribute("tkn");
+        
+        HttpHeaders headers = new HttpHeaders();
+        
+        headers.setBearerAuth(tkn);
+        
+        HttpEntity entity = new HttpEntity<>(headers);
 
         ResponseEntity<Result<Map<String, Object>>> responseEntity = restTemplate.exchange(
                 urlBase + "?page=" + page,
                 HttpMethod.GET,
-                HttpEntity.EMPTY,
+                entity,
                 new ParameterizedTypeReference<Result<Map<String, Object>>>() {
         });
 
@@ -51,14 +61,22 @@ public class PokemonController {
     }
 
     @GetMapping("/detail/{id}")
-    public String Detail(@PathVariable("id") int Id_Pokemon, Model model) {
+    public String Detail(@PathVariable("id") int Id_Pokemon, Model model, HttpSession session) {
         
         RestTemplate restTemplate = new RestTemplate();
+        
+        String tkn = (String) session.getAttribute("tkn");
+        
+        HttpHeaders headers = new HttpHeaders();
+        
+        headers.setBearerAuth(tkn);
+        
+        HttpEntity entity = new HttpEntity<>(headers);
         
         ResponseEntity<Result<PokemonDetail>> responseEntity = restTemplate.exchange(
                 urlBase + "/" + Id_Pokemon,
                 HttpMethod.GET,
-                HttpEntity.EMPTY,
+                entity,
                 new ParameterizedTypeReference<Result<PokemonDetail>>() {
         });
 

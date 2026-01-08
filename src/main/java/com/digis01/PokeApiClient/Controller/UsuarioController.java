@@ -40,7 +40,7 @@ public class UsuarioController {
     }
 
     @PostMapping("add")
-    public String AddUsuario(@ModelAttribute("Usuario") Usuario usuario, RedirectAttributes redirectAttributes) {
+    public String AddUsuario(@ModelAttribute("Usuario") Usuario usuario, RedirectAttributes redirectAttributes, HttpSession session) {
         Result result = new Result();
         
         Rol rol = new Rol();
@@ -49,10 +49,13 @@ public class UsuarioController {
         usuario.setRol(rol);
 
         RestTemplate restTemplate = new RestTemplate();
+        
+        String tkn = (String) session.getAttribute("tkn");
 
         HttpHeaders httpHeader = new HttpHeaders();
 
         httpHeader.setContentType(MediaType.APPLICATION_JSON);
+        httpHeader.setBearerAuth(tkn);
 
         HttpEntity entity = new HttpEntity<>(usuario, httpHeader);
 
@@ -69,14 +72,22 @@ public class UsuarioController {
     }
     
     @GetMapping("/{id}")
-    public String GetDetailUsuario(@PathVariable("id") int id, Model model){
+    public String GetDetailUsuario(@PathVariable("id") int id, Model model, HttpSession session){
         
         RestTemplate restTemplate = new RestTemplate();
+        
+        String tkn = (String) session.getAttribute("tkn");
+        
+        HttpHeaders headers = new HttpHeaders();
+        
+        headers.setBearerAuth(tkn);
+        
+        HttpEntity entity = new HttpEntity<>(headers);
         
         ResponseEntity<Result<Usuario>> responseEntity = restTemplate.exchange(
                 urlBase + "/usuario/" + id,
                 HttpMethod.GET,
-                HttpEntity.EMPTY,
+                entity,
                 new ParameterizedTypeReference<Result<Usuario>>(){});
         
         Result result = responseEntity.getBody();
