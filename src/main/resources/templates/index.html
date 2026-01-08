@@ -55,6 +55,12 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/html.html to edit this temp
                 text-transform: capitalize;
                 margin-bottom: 5px;
             }
+
+            .navbar-center {
+                position: absolute;
+                left: 50%;
+                transform: translatex(-50%);
+            }
         </style>
 
         <div class="row mb-4">
@@ -64,6 +70,16 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/html.html to edit this temp
             </div>
         </div>
 
+        <nav class="navbar navbar-light bg-light w-50 navbar-center">
+            <div class="container-fluid">
+                <form class="d-flex w-100" th:action="@{pokemon/realizar-busqueda}" method="GET">
+                    <input class="form-control me-2" type="search" placeholder="Busca un pokemon por su nombre..." aria-label="Search" name="name">
+                    <button class="btn btn-outline-success" type="submit">Buscar</button>
+                </form>
+            </div>
+        </nav>
+
+        <br><br><br>
         <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-4">
             <div th:each="pokemon : ${pokemons}" class="col">
                 <div class="card pokemon-card h-100">
