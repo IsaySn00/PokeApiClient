@@ -11,10 +11,12 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -138,5 +140,36 @@ public class UsuarioController {
             model.addAttribute("error", true);
             return "redirect:/usuario/login";
         }
+    }
+    
+    @PatchMapping("/update")
+    public String UpdateUsuario(@ModelAttribute("usuario") Usuario usuario, HttpSession session, Model model, RedirectAttributes redirectAttributes){
+        
+        HttpComponentsClientHttpRequestFactory requestFactory = new HttpComponentsClientHttpRequestFactory();
+        RestTemplate restTemplate = new RestTemplate(requestFactory);
+        
+        try{
+            String tkn = (String) session.getAttribute("tkn");
+            
+            HttpHeaders headers = new HttpHeaders();
+            headers.setContentType(MediaType.APPLICATION_JSON);
+            headers.setBearerAuth(tkn);
+            
+            HttpEntity entity = new HttpEntity<>(usuario, headers);
+            
+            ResponseEntity<Result> responseEntity = restTemplate.exchange(
+                    urlBase + "usuario", 
+                    HttpMethod.PATCH, 
+                    entity, 
+                    Result.class);
+            
+            redirectAttributes.addFlashAttribute("successMessage", "Se han actualizado los datos correctamente");
+            redirectAttributes.addFlashAttribute("iconModal", "success");
+            
+        }catch(Exception ex){
+            model.addAttribute("error", true);
+        }
+        
+        return "redirect:/usuario/" + usuario.getIdUsuario();
     }
 }
