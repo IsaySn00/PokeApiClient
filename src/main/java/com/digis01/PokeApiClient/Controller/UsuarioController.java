@@ -4,6 +4,7 @@ import com.digis01.PokeApiClient.ML.Result;
 import com.digis01.PokeApiClient.ML.Rol;
 import com.digis01.PokeApiClient.ML.Usuario;
 import jakarta.servlet.http.HttpSession;
+import java.util.List;
 import java.util.Map;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpEntity;
@@ -13,6 +14,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -138,5 +140,51 @@ public class UsuarioController {
             model.addAttribute("error", true);
             return "redirect:/usuario/login";
         }
+    }
+    
+    @GetMapping()
+    public String GetAllUsuario(Model model, HttpSession session){
+         String tkn = (String) session.getAttribute("tkn");
+        
+        HttpHeaders headers = new HttpHeaders();
+        
+        headers.setBearerAuth(tkn);
+        
+        HttpEntity entity = new HttpEntity<>(headers);
+        
+             RestTemplate restTemplate = new RestTemplate();
+            ResponseEntity<Result<List<Usuario>>> responseEntity = restTemplate.exchange(urlBase + "usuario", 
+                            HttpMethod.GET,
+                            entity,
+                            new ParameterizedTypeReference<Result<List<Usuario>>>(){});
+            
+       
+                Result result = responseEntity.getBody();
+                model.addAttribute("usuarios", result.object);
+      
+        return "usuarioIndex";
+    }
+    
+    @DeleteMapping("/{idUsuario}")
+    public String DeleteUsuario(@PathVariable("idUsuario")int id, Model model, HttpSession session){
+         String tkn = (String) session.getAttribute("tkn");
+        
+        HttpHeaders headers = new HttpHeaders();
+        
+        headers.setBearerAuth(tkn);
+        
+        HttpEntity entity = new HttpEntity<>(headers);
+        
+             RestTemplate restTemplate = new RestTemplate();
+            ResponseEntity<Result<List<Usuario>>> responseEntity = restTemplate.exchange(urlBase + "usuario/" + id, 
+                            HttpMethod.DELETE,
+                            entity,
+                            new ParameterizedTypeReference<Result<List<Usuario>>>(){});
+            
+       
+                Result result = responseEntity.getBody();
+                model.addAttribute("usuarios", result.object);
+                
+        return "redirect:/usuario";
     }
 }
