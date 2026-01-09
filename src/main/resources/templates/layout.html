@@ -20,18 +20,89 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/html.html to edit this temp
                 background-color: #f5f5f5;
                 font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             }
-            
+
             .navbar{
                 background-color: #ff3e3e;
                 box-shadow: 0 4px 6px rgba(0,0,0,0.1);
             }
-            
+
             .navbar-brand{
                 font-weight: bold;
                 font-size: 1.5rem;
                 color: white !important;
                 text-transform: uppercase;
                 letter-spacing: 2px;
+            }
+
+            .user-avatar-container {
+                position: relative;
+                padding: 2px;
+                background-color: rgba(255, 255, 255, 0.2); 
+                border-radius: 50%;
+                transition: transform 0.2s;
+            }
+
+            .user-avatar-container:hover {
+                background-color: rgba(255, 255, 255, 0.4);
+                transform: scale(1.05);
+            }
+
+            .user-avatar {
+                width: 40px;
+                height: 40px;
+                border-radius: 50%;
+                object-fit: cover;
+                border: 2px solid white;
+            }
+
+            .status-indicator {
+                position: absolute;
+                bottom: 0;
+                right: 0;
+                width: 12px;
+                height: 12px;
+                background-color: #2ecc71; 
+                border: 2px solid #ff3e3e; 
+                border-radius: 50%;
+            }
+
+            .x-small {
+                font-size: 0.75rem;
+            }
+
+            .dropdown-toggle.no-arrow::after {
+                display: none;
+            }
+
+            .dropdown-menu {
+                border-radius: 15px; 
+                overflow: hidden;
+                min-width: 220px;
+            }
+
+            .dropdown-item {
+                transition: background-color 0.2s;
+                font-size: 0.95rem;
+            }
+
+            .dropdown-item:hover {
+                background-color: #f8f9fa;
+                transform: translateX(5px); 
+            }
+
+            .animate-menu {
+                animation: fadeInMenu 0.3s ease-out;
+            }
+
+            @keyframes fadeInMenu {
+                from {
+                    opacity: 0;
+                    transform: translateY(-10px);
+                }
+                to {
+                    opacity: 1;
+                    transform: translateY(0);
+                }
             }
         </style>
     </head>
@@ -41,9 +112,49 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/html.html to edit this temp
                 <a class="navbar-brand" href="#">
                     <i class="bi bi-vinyl-fill"></i> Pokédex
                 </a>
+                <div class="dropdown ms-auto">
+
+                    <a href="#" class="d-flex align-items-center text-white text-decoration-none dropdown-toggle no-arrow" id="usuarioMenu" data-bs-toggle="dropdown" aria-expanded="false">
+
+                        <div class="text-end me-2 d-none d-md-block">
+                            <span class="d-block fw-bold small">Ash Ketchum</span>
+                            <span class="d-block x-small opacity-75">Entrenador</span>
+                        </div>
+
+                        <div class="user-avatar-container">
+                            <img src="https://cdn-icons-png.flaticon.com/512/4646/4646084.png" alt="Avatar" class="user-avatar">
+                            <span class="status-indicator"></span>
+                        </div>
+                    </a>
+
+                    <ul class="dropdown-menu dropdown-menu-end animate-menu shadow-lg border-0 mt-3" aria-labelledby="usuarioMenu">
+                        <li class="px-3 py-2 text-center">
+                            <small class="text-muted d-block">Conectado como</small>
+                            <span class="fw-bold text-dark">@ashketchum</span>
+                        </li>
+                        <li><hr class="dropdown-divider"></li>
+
+                        <li>
+                            <a class="dropdown-item py-2" href="perfil.html">
+                                <i class="bi bi-person-gear me-2 text-primary"></i> Mi cuenta
+                            </a>
+                        </li>
+                        <li>
+                            <a class="dropdown-item py-2" href="#">
+                                <i class="bi bi-heart me-2 text-danger"></i> Favoritos
+                            </a>
+                        </li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li>
+                            <a class="dropdown-item py-2 text-danger fw-semibold" href="login.html">
+                                <i class="bi bi-box-arrow-right me-2"></i> Cerrar sesión
+                            </a>
+                        </li>
+                    </ul>
+                </div>
             </div>
         </nav>
-        
+
         <div layout:fragment="contenido"></div>
 
         <footer class="text-center py-4 text-muted border-top mt-5">
