@@ -133,6 +133,7 @@ public class UsuarioController {
             
             session.setAttribute("tkn", tkn);
             session.setAttribute("role", rol);
+            session.setAttribute("id", idUsuario);
             
             return "redirect:/pokemon";
             
