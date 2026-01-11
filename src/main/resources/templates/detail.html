@@ -37,8 +37,7 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/html.html to edit this temp
                 padding: 25px;
                 box-shadow: 0 4px 20px rgba(0,0,0,0.03);
                 margin-bottom: 20px;
-                border: 1px solid rgba(0,0,0,0.02);
-                h-100;
+                border: 1px solid rgba(0,0,0,0.02) h-100;
             }
             .panel-title {
                 font-size: 0.85rem;
@@ -218,7 +217,7 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/html.html to edit this temp
                 <h1 class="display-4 fw-bold mb-0" th:text="${pokemon.name}"></h1>
                 <div class="mt-2"><span class="badge rounded-pill text-bg-warning text-white px-3 py-2"></span></div>
             </div>
-            <button class="btn-fav" id="btnFav" onclick="this.classList.toggle('active')"><i class="bi bi-heart-fill"></i></button>
+            <button class="btn-fav" th:classappend="${isFavorito ? ' active' : ''}" id="btnFav" onclick="this.classList.toggle('active')"><i class="bi bi-heart-fill"></i></button>
         </div>
 
         <div class="row g-4">

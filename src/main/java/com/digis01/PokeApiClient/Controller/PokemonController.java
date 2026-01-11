@@ -26,6 +26,7 @@ import org.springframework.web.client.RestTemplate;
 public class PokemonController {
 
     private final String urlBase = "http://localhost:8080/api/pokemon";
+    private final String urlBaseFav = "http://localhost:8080/api/favorito/";
 
     @GetMapping()
     public String Index(@RequestParam(defaultValue = "1") int page, Model model, HttpSession session) {
@@ -68,6 +69,7 @@ public class PokemonController {
         RestTemplate restTemplate = new RestTemplate();
         
         String tkn = (String) session.getAttribute("tkn");
+        int idUsuario = (int) session.getAttribute("id");
         
         HttpHeaders headers = new HttpHeaders();
         
@@ -81,10 +83,25 @@ public class PokemonController {
                 entity,
                 new ParameterizedTypeReference<Result<PokemonDetail>>() {
         });
+        
+        ResponseEntity<Result<Boolean>> responseFavorito = restTemplate.exchange(
+                urlBaseFav + "existe?idUsuario=" + idUsuario + "&idPokemon=" + Id_Pokemon,
+                HttpMethod.GET,
+                entity,
+                new ParameterizedTypeReference<Result<Boolean>>(){});
 
         Result result = responseEntity.getBody();
+        
+        Result resultFav = responseFavorito.getBody();
+        
+        boolean isFavorito = false;
+        
+        if(resultFav != null && resultFav.correct && resultFav.object != null){
+            isFavorito = (Boolean) resultFav.object;
+        }
 
         model.addAttribute("pokemon", result.object);
+        model.addAttribute("isFavorito", isFavorito);
 
         return "detail";
     }
