@@ -11,6 +11,8 @@ public class PokemonTipos {
     private int slot;
     private NamedApiResource type;
     
+    private PokemonTipoDetail tipoDetail;
+    
     public PokemonTipos(){
     
     }
@@ -34,6 +36,14 @@ public class PokemonTipos {
 
     public void setType(NamedApiResource type) {
         this.type = type;
+    }
+
+    public PokemonTipoDetail getTipoDetail() {
+        return tipoDetail;
+    }
+
+    public void setTipoDetail(PokemonTipoDetail tipoDetail) {
+        this.tipoDetail = tipoDetail;
     }
 
     

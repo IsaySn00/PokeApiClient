@@ -6,7 +6,7 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/html.html to edit this temp
 <html xmlns:th="http://www.thymeleaf.org" 
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="~{layout}">
-    <div class="container" layout:fragment="contenido">
+    <div class="container" layout:fragment="contenido" th:style="'--primary-color:' + ${pokemon.primaryColor}">
         <style>
             .btn-fav {
                 border: 2px solid #e0e0e0;
@@ -60,11 +60,11 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/html.html to edit this temp
             }
             .bg-circle {
                 position: absolute;
-                top: -60px;
+                top: 60px;
                 left: 50%;
                 transform: translateX(-50%);
-                width: 320px;
-                height: 320px;
+                width: 280px;
+                height: 280px;
                 background-color: var(--primary-color);
                 opacity: 0.15;
                 border-radius: 50%;
@@ -210,12 +210,14 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/html.html to edit this temp
             }
         </style>
 
-        <div class="d-flex justify-content-between align-items-end mb-4">
+        <div class="d-flex justify-content-between align-items-end mb-4 mt-4">
             <div>
                 <!--                <span class="text-muted h5">#025</span>-->
                 <input type="hidden" th:value="${pokemon.id}" class="idPoke"/>
-                <h1 class="display-4 fw-bold mb-0" th:text="${pokemon.name}"></h1>
-                <div class="mt-2"><span class="badge rounded-pill text-bg-warning text-white px-3 py-2"></span></div>
+                <h1 class="display-4 fw-bold mb-0" th:text="${pokemon.name}" style="text-transform: capitalize;"></h1>
+                <div class="mt-2">
+                    <span th:each="type : ${pokemon.types}" th:text="${type.tipoDetail.name}" th:style="'background-color:' + ${type.tipoDetail.color}" class="badge rounded-pill text-white px-3 py-2 me-2"></span>
+                </div>
             </div>
             <button class="btn-fav" th:classappend="${isFavorito ? ' active' : ''}" id="btnFav" onclick="this.classList.toggle('active')"><i class="bi bi-heart-fill"></i></button>
         </div>
@@ -224,20 +226,20 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/html.html to edit this temp
 
             <div class="col-lg-4">
                 <div class="card-identity d-flex flex-column justify-content-center align-items-center">
-                    <div class="bg-circle"></div>
+<!--                    <div class="bg-circle"></div>-->
                     <img th:src="${pokemon.sprites.front_default}" alt="poke" class="pokemon-img">
 
                     <div class="row w-100 mt-4 text-center">
                         <div class="col-6 border-end">
                             <small class="text-muted text-uppercase">Altura</small>
-                            <h4 class="fw-bold" h:text="${pokemon.height}"></h4>
+                            <h4 class="fw-bold" th:text="${pokemon.heightMeters} + ' m'"></h4>
                         </div>
                         <div class="col-6">
                             <small class="text-muted text-uppercase">Peso</small>
-                            <h4 class="fw-bold" th:text="${pokemon.weight}"></h4>
+                            <h4 class="fw-bold" th:text="${pokemon.weightKg} + ' kg'"></h4>
                         </div>
                     </div>
-                    <p class="text-muted mt-4 text-center fst-italic px-3">Descc</p>
+                    <p class="text-muted mt-4 text-center fst-italic px-3" th:text="${pokemon.description}"></p>
                 </div>
             </div>
 
@@ -245,37 +247,31 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/html.html to edit this temp
 
                 <div class="info-panel mb-3">
                     <h6 class="panel-title"><i class="bi bi-stars me-2"></i> Habilidades</h6>
-                    <div class="d-flex flex-wrap">
-                        <div class="ability-badge ability-normal">
+                    <div  class="d-flex flex-wrap">
 
-                        </div>
-                        <div class="ability-badge ability-hidden" title="Habilidad Oculta">
-                            <i class="bi bi-eye-slash-fill me-2"></i> 
+                        <div  th:each="ability : ${pokemon.abilities}" class="ability-badge ability-normal" th:text="${ability.abilityDetail.name}">
                         </div>
                     </div>
                 </div>
 
                 <div class="info-panel mb-3">
-                    <h6 class="panel-title"><i class="bi bi-bar-chart-line-fill me-2"></i> Stats Base</h6>
-                    <div class="stat-item">
-                        <span class="stat-label">HP</span>
-                        <div class="progress progress-custom"><div class="progress-bar progress-bar-custom" style="width: 35%"></div></div>
-                        <span class="fw-bold"></span>
-                    </div>
-                    <div class="stat-item">
-                        <span class="stat-label">ATK</span>
-                        <div class="progress progress-custom"><div class="progress-bar progress-bar-custom" style="width: 55%"></div></div>
-                        <span class="fw-bold"></span>
-                    </div>
-                    <div class="stat-item">
-                        <span class="stat-label">DEF</span>
-                        <div class="progress progress-custom"><div class="progress-bar progress-bar-custom" style="width: 40%"></div></div>
-                        <span class="fw-bold"></span>
-                    </div>
-                    <div class="stat-item">
-                        <span class="stat-label">SPD</span>
-                        <div class="progress progress-custom"><div class="progress-bar progress-bar-custom" style="width: 90%; background: #ff7675;"></div></div>
-                        <span class="fw-bold"></span>
+                    <h6 class="panel-title"><i class="bi bi-bar-chart-line-fill me-2"></i> Estadísticas base</h6>
+                    <div class="stat-item" th:each="stat : ${pokemon.stats}">
+                        <span class="stat-label" th:text="${
+                              stat.stat.name == 'hp' ? 'PS' :
+                              stat.stat.name == 'attack' ? 'Ataque' :
+                              stat.stat.name == 'defense' ? 'Defensa' :
+                              stat.stat.name == 'special-attack' ? 'At. Especial' :
+                              stat.stat.name == 'special-defense' ? 'Def. Especial' :
+                              stat.stat.name == 'speed' ? 'Velocidad' : stat.stat.name
+                              }">
+                        </span>
+                        <div class="progress progress-custom">
+                            <div class="progress-bar progress-bar-custom" 
+                                 th:style="'width: ' + (${stat.base_stat}) + '%'">
+                            </div>
+                        </div>
+                        <span class="fw-bold" th:text="${stat.base_stat}"></span>
                     </div>
                 </div>
 
@@ -285,9 +281,9 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/html.html to edit this temp
                         <div class="info-panel h-100">
                             <h6 class="panel-title text-success"><i class="bi bi-shield-fill-check me-2"></i> Fortaleza</h6>
                             <div class="type-grid">
-                                <div class="type-badge">
-                                    <div class="type-icon t-flying"><i class="bi bi-wind"></i></div>
-                                    <span>Volador</span>
+                                <div class="type-badge" th:each="fortaleza : ${pokemon.fortalezas}" th:style="'background-color:' + ${fortaleza.color}">
+                                    <!--                                    <div class="type-icon t-flying"><i class="bi bi-wind"></i></div>-->
+                                    <span th:text="${fortaleza.name}"></span>
                                 </div>
 
                             </div>
@@ -297,9 +293,9 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/html.html to edit this temp
                         <div class="info-panel h-100">
                             <h6 class="panel-title text-danger"><i class="bi bi-exclamation-triangle-fill me-2"></i> Debilidad</h6>
                             <div class="type-grid">
-                                <div class="type-badge">
-                                    <div class="type-icon t-ground"><i class="bi bi-bricks"></i></div>
-                                    <span>Tierra</span>
+                                <div class="type-badge" th:each="debilidad : ${pokemon.debilidades}" th:style="'background-color:' + ${debilidad.color}">
+                                    <!--                                    <div class="type-icon t-ground"><i class="bi bi-bricks"></i></div>-->
+                                    <span th:text="${debilidad.name}" ></span>
                                 </div>
                             </div>
                         </div>
@@ -309,34 +305,18 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/html.html to edit this temp
             </div> <div class="col-12">
                 <div class="info-panel">
                     <h6 class="panel-title text-center mb-4">Línea Evolutiva</h6>
-
                     <div class="evo-container">
-
-                        <div class="evo-card">
-                            <div class="evo-img-wrapper">
-                                <img src="" alt="ev" class="evo-img">
-                            </div>
-                            <small class="fw-bold text-muted"></small>
+                        <div class="d-flex align-items-center" th:each="evo, stat : ${pokemon.evoluciones}">
+                            <a th:href="@{/pokemon/detail/{id}(id = ${evo.id})}">
+                                <div class="evo-card">
+                                    <div class="evo-img-wrapper">
+                                        <img th:src="${evo.image}" alt="ev" class="evo-img">
+                                    </div>
+                                    <small th:text="${evo.name}" class="fw-bold text-muted"></small>
+                                </div>
+                            </a>
+                            <i class="bi bi-chevron-right evo-arrow" th:if="${!stat.last}"></i>
                         </div>
-
-                        <i class="bi bi-chevron-right evo-arrow"></i>
-
-                        <div class="evo-card current-evo">
-                            <div class="evo-img-wrapper">
-                                <img src="" alt="ev" class="evo-img">
-                            </div>
-                            <small class="fw-bold text-dark"></small>
-                        </div>
-
-                        <i class="bi bi-chevron-right evo-arrow"></i>
-
-                        <div class="evo-card">
-                            <div class="evo-img-wrapper">
-                                <img src="" alt="ev" class="evo-img">
-                            </div>
-                            <small class="fw-bold text-muted"></small>
-                        </div>
-
                     </div>
                 </div>
             </div>
