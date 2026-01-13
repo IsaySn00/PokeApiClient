@@ -332,12 +332,12 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/html.html to edit this temp
                     idPokemon: idPoke
                 }
                 
-                const url = isActive 
+                const url = !isActive 
                         ? `http://localhost:8080/api/favorito?idUsuario=${idUsuario}&idPokemon=${idPoke}`
                         : `http://localhost:8080/api/favorito?idUsuario=${idUsuario}`;
                         
-                const method = isActive ? "DELETE" : "POST";
-                const data = isActive ? null : SON.stringify(fav);
+                const method = !isActive ? "DELETE" : "POST";
+                const data = !isActive ? null : JSON.stringify(fav);
 
                 $.ajax({
                     type: method,
