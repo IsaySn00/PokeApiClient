@@ -323,19 +323,28 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/html.html to edit this temp
         </div> 
         <script th:inline="javascript">
             $(".btn-fav").on("click", function () {
-
-                let id = /*[[${session.id}]]*/ '';
+                
+                const btn = $(this);
+                let idUsuario = /*[[${session.id}]]*/ '';
                 let idPoke = $(".idPoke").val();
+                const isActive = btn.hasClass("active");
                 const fav = {
                     idPokemon: idPoke
                 }
+                
+                const url = !isActive 
+                        ? `http://localhost:8080/api/favorito?idUsuario=${idUsuario}&idPokemon=${idPoke}`
+                        : `http://localhost:8080/api/favorito?idUsuario=${idUsuario}`;
+                        
+                const method = !isActive ? "DELETE" : "POST";
+                const data = !isActive ? null : JSON.stringify(fav);
 
                 $.ajax({
-                    type: 'POST',
-                    url: `http://localhost:8080/api/favorito?idUsuario=${id}`,
+                    type: method,
+                    url: url,
                     headers: {"Authorization": "Bearer " + /*[[${session.tkn}]]*/ ''},
                     contentType: "application/json",
-                    data: JSON.stringify(fav),
+                    data: data,
                     datatype: "json",
                     sucess: function (response) {
                         Swal.fire({
