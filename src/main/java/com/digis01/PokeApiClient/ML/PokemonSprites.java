@@ -4,12 +4,17 @@
  */
 package com.digis01.PokeApiClient.ML;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class PokemonSprites {
       
     private String back_default;
     private String back_female;
     private String back_shiny;
     private String back_shiny_female;
+    @JsonProperty("front_default")
     private String front_default;
     private String front_female;
     private String front_shiny;

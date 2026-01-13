@@ -68,6 +68,53 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/html.html to edit this temp
                 border-radius: 50px;
                 padding: 8px 25px;
             }
+            
+            .pokemon-card{
+                border:none;
+                border-radius: 15px;
+                background: white;
+                transition: all 0.3 ease;
+                box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+                overflow: hidden;
+                cursor: pointer;
+            }
+
+            .pokemon-card:hover{
+                transform: translateY(-5px);
+                box-shadow: 0 10px 20px rgba(0,0,0,0.15);
+            }
+
+            .card-img-container{
+                background-color: #f0f0f0;
+                padding: 20px;
+                text-align: center;
+                border-bottom: 1px solid #e0e0e0;
+            }
+
+            .pokemon-img{
+                width: 120px;
+                height: 120px;
+                object-fit: contain;
+                filter: drop-shadow(0 5px 5px rgba(0,0,0,0.2));
+            }
+
+            .card-body{
+                text-align: center;
+            }
+
+            .pokemon-id{
+                color: #999;
+                font-size: 0.9rem;
+                font-weight: 600;
+            }
+
+            .pokemon-name{
+                font-weight: bold;
+                font-size: 1.2rem;
+                color: #333;
+                text-transform: capitalize;
+                margin-bottom: 5px;
+            }
         </style>
         <div class="row justify-content-center mt-3">
             <div class="col-lg-8">
@@ -196,5 +243,43 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/html.html to edit this temp
                 </div>
             </div>
         </div>
+
+        <div class="row justify-content-center mt-3">
+            <div class="col-lg-8">
+                <div class="card profile-card">
+                    <div class="card-body p-4">
+                        <di class="col-md-4 text-center border-end-md">
+                            <div class="row">
+                                <div class="col-md-11 ps-md-5 pt-4 pt-md-0">
+                                    <h5 class="mb-4 text-primary fw-bold"><i class="bi bi-suit-heart-fill"></i> Pokemons Favoritos</h5>
+                                </div>
+
+                                <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-4">
+                                    <div th:each="fav : ${usuario.favoritos}" class="col">
+                                        <div class="card pokemon-card h-100">
+                                            <a th:href="@{/pokemon/detail/{id}(id = ${fav.idPokemon})}">
+                                                <div class="card-img-container">
+                                                    <img class="pokemon-img" th:src="${fav.pokemonData.sprites.front_default}"  alt="imagen de pokémon"/>
+                                                </div>
+                                                <div class="card-body">
+                                                    <p class="pokemon-id"></p>
+                                                    <h5 class="pokemon-name" th:text="${fav.pokemonData.name}"></h5>
+                                                    <!--                        <div class="mt-2">
+                                                                                <span class="badge badge-type bg-grass text-white"></span>
+                                                                            </div>-->
+                                                </div>
+                                            </a>    
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <br><br>
+                            </div>
+                        </di> 
+                    </div>
+                </div>
+            </div>
+        </div>
+
     </div>
 </html>

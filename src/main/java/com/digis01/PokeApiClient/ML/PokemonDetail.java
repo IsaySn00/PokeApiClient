@@ -4,9 +4,11 @@
  */
 package com.digis01.PokeApiClient.ML;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import java.util.ArrayList;
 import java.util.List;
 
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class PokemonDetail {
 
     private int id;
