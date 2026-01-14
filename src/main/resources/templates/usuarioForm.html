@@ -39,7 +39,106 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/html.html to edit this temp
             .form-floating > label{
                 padding-left: 15px;
             }
+
+            .correct{
+                border-color: green;
+            }
+
+            .error{
+                border-color: red;
+            }
         </style>
+
+        <script>
+            function SoloLetras(event, input) {
+                let value = event.key;
+                //let RegExp = /^[a-zA-ZñÑ]+(\s{1}[a-zA-ZñÑ]+)*$/;
+                let RegExp = /^[ a-zA-ZñÑ\-\'\u00C0-\u017F]+$/;
+
+                if (RegExp.test(value)) {
+                    $(input).removeClass("error").addClass("correct");
+                    $(input).siblings(".error-msg").text("");
+                } else {
+                    $(input).removeClass("correct").addClass("error");
+                    $(input).siblings(".error-msg").text("El campo solo permite letras");
+                    event.preventDefault();
+                }
+            }
+
+            function SoloNumeros(event, input) {
+                let value = event.key;
+                let RegExp = /^[0-9]+$/;
+
+                if (RegExp.test(value)) {
+                    $(input).removeClass("error").addClass("correct");
+                    $(input).siblings(".error-msg").text("");
+                } else {
+                    $(input).removeClass("correct").addClass("error");
+                    $(input).siblings(".error-msg").text("El campo solo permite números");
+                    event.preventDefault();
+                }
+            }
+
+            function ValidarUsername(event, input) {
+                let value = event.key;
+                let RegExp = /^[a-z0-9_]+$/i;
+
+                if (RegExp.test(value)) {
+                    $(input).removeClass("error").addClass("correct");
+                    $(input).siblings(".error-msg").text("");
+                } else {
+                    $(input).removeClass("correct").addClass("error");
+                    $(input).siblings(".error-msg").text("El campo solo permite guión bajo (_)");
+                    event.preventDefault();
+                }
+            }
+
+            function ValidarEmail(input) {
+
+                let value = $("#" + input.id).val();
+                let RegExp = /^(([^<>()[\]\.,;:\s@\"]+(\.[^<>()[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/;
+
+                if (RegExp.test(value)) {
+                    $(input).removeClass("error").addClass("correct");
+                    $(input).siblings(".error-msg").text("");
+                } else {
+                    $(input).removeClass("correct").addClass("error");
+                    $(input).siblings(".error-msg").text("La dirección de email es incorrecta");
+                }
+            }
+
+            function ValidarPassword(input) {
+
+                let value = $("#" + input.id).val();
+                var mensajeDescriptivo = "";
+
+                if (!/[A-Z]/.test(value)) {
+                    mensajeDescriptivo = mensajeDescriptivo + " Al menos una letra mayuscula. ";
+                }
+                if (!/[a-z]/.test(value)) {
+                    mensajeDescriptivo = mensajeDescriptivo + " Al menos una letra minuscula. ";
+                }
+                if (!/[0-9]/.test(value)) {
+                    mensajeDescriptivo = mensajeDescriptivo + " Al menos un número. ";
+                }
+                if (!/[*@!#%&()^~{}]+/.test(value)) {
+                    mensajeDescriptivo = mensajeDescriptivo + " Al menos un carácter especial. ";
+                }
+                if (value.length < 8) {
+                    mensajeDescriptivo = mensajeDescriptivo + " Mínimo 8 caracteres. ";
+                }
+
+                if (mensajeDescriptivo.length > 0) {
+                    $(input).removeClass("correct").addClass("error");
+                    $(input).siblings(".error-msg").text(mensajeDescriptivo);
+                } else {
+                    $(input).removeClass("error").addClass("correct");
+                    $(input).siblings(".error-msg").text("");
+                }
+            }
+
+        </script>
+
         <div class="row justify-content-center mt-3">
             <div class="col-lg-8 col-md-10">
                 <div class="card card-registro">
@@ -54,26 +153,30 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/html.html to edit this temp
                             <div class="row g-3 mb-3">
                                 <div class="col-md-4">
                                     <div class="form-floating">
-                                        <input type="text" th:field="*{nombreUsuario}" class="form-control" id="nombre" placeholder="Nombre" required/>
+                                        <input type="text" th:field="*{nombreUsuario}" class="form-control soloLetras" id="nombre" placeholder="Nombre" onkeypress="SoloLetras(event, this)" required/>
                                         <label for="nombre">Nombre</label>
+                                        <span class="error-msg text-danger" id="icon"></span>  
                                     </div>
                                 </div>
                                 <div class="col-md-4">
                                     <div class="form-floating">
-                                        <input type="text" th:field="*{apellidoPatUsuario}" class="form-control" id="apPaterno" placeholder="Ap. Paterno" required/>
+                                        <input type="text" th:field="*{apellidoPatUsuario}" class="form-control" id="apPaterno" placeholder="Ap. Paterno" onkeypress="SoloLetras(event, this)" required/>
                                         <label for="nombre">Apellido Paterno</label>
+                                        <span class="error-msg text-danger" id="icon"></span>
                                     </div>
                                 </div>
                                 <div class="col-md-4">
                                     <div class="form-floating">
-                                        <input type="text" th:field="*{apellidoMatUsuario}" class="form-control" id="apMaterno" placeholder="Ap. Materno" required/>
+                                        <input type="text" th:field="*{apellidoMatUsuario}" class="form-control" id="apMaterno" placeholder="Ap. Materno" onkeypress="SoloLetras(event, this)" required/>
                                         <label for="nombre">Apellido Materno</label>
+                                        <span class="error-msg text-danger" id="icon"></span>
                                     </div>
                                 </div>
                                 <div class="col-md-4">
                                     <div class="form-floating">
-                                        <input type="text" class="form-control" th:field="*{telefonoUsuario}" id="telefono" placeholder="Teléfono" required/>
+                                        <input type="text" class="form-control" th:field="*{telefonoUsuario}" id="telefono" placeholder="Teléfono" onkeypress="SoloNumeros(event, this)" required/>
                                         <label for="telefono">Teléfono</label>
+                                        <span class="error-msg text-danger" id="icon"></span>
                                     </div>
                                 </div>
                             </div>
@@ -85,8 +188,9 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/html.html to edit this temp
                                 <div class="col-md-12">
                                     <div class="input-group">
                                         <div class="form-floating flex-grow-1">
-                                            <input type="text" th:field="*{userName}" class="form-control" id="username" placeholder="Usuario" required>
+                                            <input type="text" th:field="*{userName}" class="form-control" id="username" placeholder="Usuario" onkeypress="ValidarUsername(event, this)" required>
                                             <label for="username">Nombre de Usuario</label>
+                                            <span class="error-msg text-danger" id="icon"></span>
                                         </div>
                                     </div>
                                 </div>
@@ -95,14 +199,16 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/html.html to edit this temp
                             <div class="row g-3 mb-4">
                                 <div class="col-md-6">
                                     <div class="form-floating">
-                                        <input type="email" th:field="*{emailUsuario}" class="form-control" id="email" placeholder="correo@ejemplo.com" required>
+                                        <input type="email" th:field="*{emailUsuario}" class="form-control" id="email" placeholder="correo@ejemplo.com" onblur="ValidarEmail(this)" required>
                                         <label for="email">Correo Electrónico</label>
+                                        <span class="error-msg text-danger" id="icon"></span>
                                     </div>
                                 </div>
                                 <div class="col-md-6">
                                     <div class="form-floating">
-                                        <input type="password" th:field="*{passwordUsuario}" class="form-control" id="password" placeholder="Contraseña" required>
+                                        <input type="password" th:field="*{passwordUsuario}" class="form-control" id="password" placeholder="Contraseña" onkeypress="ValidarPassword(this)" required>
                                         <label for="email">Contraseña</label>
+                                        <span class="error-msg text-danger" id="icon"></span>
                                     </div>
                                 </div>
                             </div>

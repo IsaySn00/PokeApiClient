@@ -183,7 +183,111 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/html.html to edit this temp
                 color: white;
                 align-items: center;
             }
+            
+            .input-container {
+            position: relative; /* Para posicionar el icono respecto a este contenedor */
+            width: 300px;
+            }
+            
+            .correct{
+                border-color: green;
+            }
+
+            .error{
+                border-color: red;
+            }
         </style>
+        
+        <script>
+            function SoloLetras(event, input) {
+                let value = event.key;
+                //let RegExp = /^[a-zA-ZñÑ]+(\s{1}[a-zA-ZñÑ]+)*$/;
+                let RegExp = /^[ a-zA-ZñÑ\-\'\u00C0-\u017F]+$/;
+
+                if (RegExp.test(value)) {
+                    $(input).removeClass("error").addClass("correct");
+                    $(input).siblings(".error-msg").text("");
+                } else {
+                    $(input).removeClass("correct").addClass("error");
+                    $(input).siblings(".error-msg").text("El campo solo permite letras");
+                    event.preventDefault();
+                }
+            }
+
+            function SoloNumeros(event, input) {
+                let value = event.key;
+                let RegExp = /^[0-9]+$/;
+
+                if (RegExp.test(value)) {
+                    $(input).removeClass("error").addClass("correct");
+                    $(input).siblings(".error-msg").text("");
+                } else {
+                    $(input).removeClass("correct").addClass("error");
+                    $(input).siblings(".error-msg").text("El campo solo permite números");
+                    event.preventDefault();
+                }
+            }
+
+            function ValidarUsername(event, input) {
+                let value = event.key;
+                let RegExp = /^[a-z0-9_]+$/i;
+
+                if (RegExp.test(value)) {
+                    $(input).removeClass("error").addClass("correct");
+                    $(input).siblings(".error-msg").text("");
+                } else {
+                    $(input).removeClass("correct").addClass("error");
+                    $(input).siblings(".error-msg").text("El campo solo permite guión bajo (_)");
+                    event.preventDefault();
+                }
+            }
+
+            function ValidarEmail(input) {
+
+                let value = $("#" + input.id).val();
+                let RegExp = /^(([^<>()[\]\.,;:\s@\"]+(\.[^<>()[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/;
+
+                if (RegExp.test(value)) {
+                    $(input).removeClass("error").addClass("correct");
+                    $(input).siblings(".error-msg").text("");
+                } else {
+                    $(input).removeClass("correct").addClass("error");
+                    $(input).siblings(".error-msg").text("La dirección de email es incorrecta");
+                }
+            }
+
+            function ValidarPassword(input) {
+
+                let value = $("#" + input.id).val();
+                var mensajeDescriptivo = "";
+
+                if (!/[A-Z]/.test(value)) {
+                    mensajeDescriptivo = mensajeDescriptivo + " Al menos una letra mayuscula. ";
+                }
+                if (!/[a-z]/.test(value)) {
+                    mensajeDescriptivo = mensajeDescriptivo + " Al menos una letra minuscula. ";
+                }
+                if (!/[0-9]/.test(value)) {
+                    mensajeDescriptivo = mensajeDescriptivo + " Al menos un número. ";
+                }
+                if (!/[*@!#%&()^~{}]+/.test(value)) {
+                    mensajeDescriptivo = mensajeDescriptivo + " Al menos un carácter especial. ";
+                }
+                if (value.length < 8) {
+                    mensajeDescriptivo = mensajeDescriptivo + " Mínimo 8 caracteres. ";
+                }
+
+                if (mensajeDescriptivo.length > 0) {
+                    $(input).removeClass("correct").addClass("error");
+                    $(input).siblings(".error-msg").text(mensajeDescriptivo);
+                } else {
+                    $(input).removeClass("error").addClass("correct");
+                    $(input).siblings(".error-msg").text("");
+                }
+            }
+
+        </script>
+        
         <div class="row justify-content-center mt-3">
             <div class="col-lg-8">
                 <div class="card profile-card">
@@ -200,6 +304,12 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/html.html to edit this temp
                                 <div class="d-grip gap-2">
                                     <button class="btn btn-outline-primary btn-edit btn-sm" data-bs-toggle="modal" data-bs-target="#modalEditarPerfil">
                                         <i class="bi bi-pencil-square"></i> Editar Perfil
+                                    </button>
+                                </div>
+                                <br>
+                                <div class="d-grip gap-2">
+                                    <button class="btn btn-outline-primary btn-edit btn-sm" data-bs-toggle="modal" data-bs-target="#modalEditarContraseña">
+                                        <i class="bi bi-pencil-square"></i> Cambiar Contraseña
                                     </button>
                                 </div>
                                 <div class="modal fade" id="modalEditarPerfil" tabindex="-1" aria-labelledby="modalEditarLabel" aria-hidden="true">
@@ -221,20 +331,23 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/html.html to edit this temp
                                                     <div class="row g-3 mb-3">
                                                         <div class="col-md-4">
                                                             <div class="form-floating">
-                                                                <input type="text" class="form-control" id="editNombre" th:field="*{nombreUsuario}" placeholder="Nombre">
+                                                                <input type="text" class="form-control" id="editNombre" th:field="*{nombreUsuario}" placeholder="Nombre" onkeypress="SoloLetras(event, this)">
                                                                 <label for="editNombre">Nombre</label>
+                                                                <span class="error-msg text-danger" id="icon"></span> 
                                                             </div>
                                                         </div>
                                                         <div class="col-md-4">
                                                             <div class="form-floating">
-                                                                <input type="text" class="form-control" id="editApPaterno" th:field="*{apellidoPatUsuario}" placeholder="Apellido Paterno">
+                                                                <input type="text" class="form-control" id="editApPaterno" th:field="*{apellidoPatUsuario}" placeholder="Apellido Paterno" onkeypress="SoloLetras(event, this)">
                                                                 <label for="editApPaterno">Apellido Paterno</label>
+                                                                <span class="error-msg text-danger" id="icon"></span> 
                                                             </div>
                                                         </div>
                                                         <div class="col-md-4">
                                                             <div class="form-floating">
-                                                                <input type="text" class="form-control" id="editApMaterno" th:field="*{apellidoMatUsuario}" value="Delia" placeholder="Apellido Materno">
+                                                                <input type="text" class="form-control" id="editApMaterno" th:field="*{apellidoMatUsuario}" value="Delia" placeholder="Apellido Materno" onkeypress="SoloLetras(event, this)">
                                                                 <label for="editApMaterno">Apellido Materno</label>
+                                                                <span class="error-msg text-danger" id="icon"></span> 
                                                             </div>
                                                         </div>
                                                     </div>
@@ -243,22 +356,25 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/html.html to edit this temp
                                                     <div class="row g-3 mb-3">
                                                         <div class="col-md-6">
                                                             <div class="form-floating">
-                                                                <input type="tel" class="form-control" id="editTelefono" th:field="*{telefonoUsuario}" placeholder="Teléfono">
+                                                                <input type="tel" class="form-control" id="editTelefono" th:field="*{telefonoUsuario}" placeholder="Teléfono" onkeypress="SoloNumeros(event, this)">
                                                                 <label for="editTelefono">Teléfono</label>
+                                                                 <span class="error-msg text-danger" id="icon"></span> 
                                                             </div>
                                                         </div>
                                                         <div class="col-md-6">
                                                             <div class="form-floating">
-                                                                <input type="email" class="form-control" id="editEmail" th:field="*{emailUsuario}" placeholder="Email">
+                                                                <input type="email" class="form-control" id="editEmail" th:field="*{emailUsuario}" placeholder="Email" onblur="ValidarEmail(this)">
                                                                 <label for="editEmail">Correo Electrónico</label>
+                                                                <span class="error-msg text-danger" id="icon"></span> 
                                                             </div>
                                                         </div>
                                                     </div>
                                                     <div class="row g-3">
                                                         <div class="col-md-6">
                                                             <div class="form-floating">
-                                                                <input type="text" class="form-control bg-light" id="editUsername" th:field="*{userName}" placeholder="Usuario">
+                                                                <input type="text" class="form-control bg-light" id="editUsername" th:field="*{userName}" placeholder="Usuario" onkeypress="ValidarUsername(event, this)">
                                                                 <label for="editUsername">Usuario</label>
+                                                                <span class="error-msg text-danger" id="icon"></span> 
                                                             </div>
                                                             <input type="hidden" th:field="*{Rol.idRol}">
                                                         </div>
@@ -275,6 +391,83 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/html.html to edit this temp
                                         </div>
                                     </div>
                                 </div>
+                                
+                                
+                                <div class="modal fade" id="modalEditarContraseña" tabindex="-1" aria-labelledby="modalEditarLabel" aria-hidden="true">
+                                    <div class="modal-dialog modal-lg modal-dialog-centered"> <div class="modal-content">
+
+                                            <div class="modal-header bg-primary text-white">
+                                                <h5 class="modal-title fw-bold" id="modalEditarLabel">
+                                                    <i class="bi bi-lock"></i> Actualizar Contraseña
+                                                </h5>
+                                                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                                            </div>
+                                            <form id="formEditarPerfil" th:action="@{update}" th:object="${usuario}" method="post">
+
+                                                <div class="modal-body p-4">
+
+                                                    <input type="hidden" name="_method" value="PATCH"/>
+                                                    <input type="hidden" th:field="*{idUsuario}"/>
+                                                    <h6 class="text-muted text-uppercase small mb-3">Ingresa la contraseña actual</h6>
+                                                    <div class="row g-3 mb-3">
+                                                        <div class="col-md-6">
+                                                            <div class="form-floating">
+                                                                <input type="password" class="form-control input-container" id="editPassword" placeholder="Contraseña" onkeypress="ValidarPassword(this)">
+                                                                <label for="editPassword">Password</label>
+                                                                <span class="error-msg text-danger" id="icon"></span>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-md-6">
+                                                            <button type="submit" class="btn btn-outline-success">Validar</button>
+                                                        </div>
+                                                    </div>
+
+                                                    <h6 class="text-muted text-uppercase small mb-3 mt-4">Ingresa el código que se envío a tu correo</h6>
+                                                    <div class="row g-3 mb-3">
+                                                        <div class="col-md-6">
+                                                            <div class="form-floating">
+                                                                <input type="text" class="form-control" id="codigo" placeholder="Código" required="">
+                                                                <label for="Codigo">Código</label>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-md-6">
+                                                                <button type="button" class="btn btn-outline-primary">Reenviar código de nuevo</button>
+                                                        </div>
+                                                    </div>
+                                                    
+                                                    <h6 class="text-muted text-uppercase small mb-3 mt-4" hidden="true">Ingresa la nueva contraseña</h6>
+                                                    <div class="row g-3 mb-3">
+                                                        <div class="col-md-6">
+                                                            <div class="form-floating" hidden="true">
+                                                                <input type="password" class="form-control" id="nuevaPassword" placeholder="Nueva Contraseña" onkeypress="ValidarPassword(this)">
+                                                                <label for="nuevaPassword">Nueva Contraseña</label>
+                                                                <span class="error-msg text-danger" id="icon"></span>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-md-6" hidden="true">
+                                                            <div class="form-floating">
+                                                                <input type="password" class="form-control" id="confirmarPassword" placeholder="Confirma Contraseña" onkeypress="ValidarPassword(this)">
+                                                                <label for="confirmarPassword">Confirma Contraseña</label>
+                                                                <span class="error-msg text-danger" id="icon"></span>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    
+                                                </div>
+
+                                                <div class="modal-footer bg-light">
+                                                    <button type="button" class="btn btn-secondary rounded-pill px-4" data-bs-dismiss="modal">Cancelar</button>
+                                                    <button type="submit" class="btn btn-primary rounded-pill px-4">
+                                                        <i class="bi bi-save"></i> Guardar Cambios
+                                                    </button>
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                
+                                
                             </div>
                             <div class="col-md-8 ps-md-5 pt-4 pt-md-0">
                                 <h5 class="mb-4 text-primary fw-bold"><i class="bi bi-card-heading"></i> Información del usuario</h5>
