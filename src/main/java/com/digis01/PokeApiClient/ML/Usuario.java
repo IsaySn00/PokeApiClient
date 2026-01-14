@@ -1,6 +1,8 @@
 package com.digis01.PokeApiClient.ML;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import java.util.ArrayList;
+import java.util.List;
 
 
 public class Usuario {
@@ -20,6 +22,8 @@ public class Usuario {
     private String emailUsuario;
     
     private String passwordUsuario;
+    
+    private List<Favorito> favoritos = new ArrayList<>();
     
     @JsonProperty("RolJPA")
     public Rol Rol;
@@ -95,5 +99,14 @@ public class Usuario {
     public void setRol(Rol Rol) {
         this.Rol = Rol;
     }
+
+    public List<Favorito> getFavoritos() {
+        return favoritos;
+    }
+
+    public void setFavoritos(List<Favorito> favoritos) {
+        this.favoritos = favoritos;
+    }
    
+    
 }

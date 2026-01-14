@@ -12,6 +12,53 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/html.html to edit this temp
             title: [[${successMessage}]],
                     icon: [[${iconModal}]]
             });
+
+        </script>
+        <script th:inline="javascript">
+          $(document).ready(function(){
+              
+                $(".btnEliminar").click(function () {
+                    console.log(this);
+                    //const idUsuario = $(this).data("usuario");
+                    const idPokemon = $(this).data("pokemon");
+                    const cardEliminar = $(this).closest(".col");
+                    let idUsuario = /*[[${session.id}]]*/ '';
+                    
+                    Swal.fire({
+                        title: "¿Desea quitarlo de favoritos?",
+                        icon: "warning",
+                        showCancelButton: true,
+                        confirmButtonColor: "#3085d6",
+                        cancelButtonColor: "#d33",
+                        confirmButtonText: "Si, eliminar"
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            $.ajax({
+                                type: "DELETE",
+                                url: "http://localhost:8080/api/favorito",
+                                headers: {"Authorization": "Bearer " + /*[[${session.tkn}]]*/ ''},
+                                data:{
+                                    idUsuario: idUsuario,
+                                    idPokemon: idPokemon
+                                },
+                                success: function (data) {
+                                    Swal.fire("Eliminado!", "El pokemon se eliminó de favoritos", "success").then(() => {
+                                        location.reload();
+                                    });
+                                    elementoAEliminar.fadeOut(500, function() {
+                                    $(this).remove();
+                                    });
+                                },
+                                error: function (xhr, status, error) {
+                                    Swal.fire("Error", "Ha ocurrido un error al eliminar el pokemon de favoritos", "error");
+                                }
+                            });
+                        }
+
+                    });
+                
+            });  
+        });
         </script>
         <style>
             .profile-card{
@@ -67,6 +114,74 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/html.html to edit this temp
             .btn-edit{
                 border-radius: 50px;
                 padding: 8px 25px;
+            }
+            
+            .pokemon-card{
+                border:none;
+                border-radius: 15px;
+                background: white;
+                transition: all 0.3 ease;
+                box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+                overflow: hidden;
+                cursor: pointer;
+            }
+
+            .pokemon-card:hover{
+                transform: translateY(-5px);
+                box-shadow: 0 10px 20px rgba(0,0,0,0.15);
+            }
+
+            .card-img-container{
+                background-color: #f0f0f0;
+                padding: 20px;
+                text-align: center;
+                border-bottom: 1px solid #e0e0e0;
+            }
+
+            .pokemon-img{
+                width: 120px;
+                height: 120px;
+                object-fit: contain;
+                filter: drop-shadow(0 5px 5px rgba(0,0,0,0.2));
+            }
+
+            .card-body{
+                text-align: center;
+            }
+
+            .pokemon-id{
+                color: #999;
+                font-size: 0.9rem;
+                font-weight: 600;
+            }
+
+            .pokemon-name{
+                font-weight: bold;
+                font-size: 1.2rem;
+                color: #333;
+                text-transform: capitalize;
+                margin-bottom: 5px;
+            }
+            
+            .btn-fav {
+                border: 2px solid #e0e0e0;
+                background: white;
+                color: #ccc;
+                width: 35px;
+                height: 35px;
+                border-radius: 12px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                font-size: 1.0rem;
+                cursor: pointer;
+                transition: all 0.3s;
+            }
+            
+            .btn-fav.active {
+                background-color: #ff4757;
+                color: white;
+                align-items: center;
             }
         </style>
         <div class="row justify-content-center mt-3">
@@ -196,5 +311,46 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/html.html to edit this temp
                 </div>
             </div>
         </div>
+
+        <div class="row justify-content-center mt-3">
+            <div class="col-lg-8">
+                <div class="card profile-card">
+                    <div class="card-body p-4">
+                        <di class="col-md-4 text-center border-end-md">
+                            <div class="row">
+                                <div class="col-md-11 ps-md-5 pt-4 pt-md-0">
+                                    <h5 class="mb-4 text-primary fw-bold"><i class="bi bi-suit-heart-fill"></i> Pokemons Favoritos</h5>
+                                </div>
+
+                                <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-4">
+                                    <div th:each="fav : ${usuario.favoritos}" class="col">
+                                        <div class="card pokemon-card h-100">
+                                            <a th:href="@{/pokemon/detail/{id}(id = ${fav.idPokemon})}">
+                                                <div class="card-img-container">
+                                                    <img class="pokemon-img" th:src="${fav.pokemonData.sprites.front_default}"  alt="imagen de pokémon"/>
+                                                </div>
+                                            </a>
+                                                <div class="card-body">
+                                                    <p class="pokemon-id"></p>
+                                                    <i class="bi bi-heart-fill btn-fav active btnEliminar"
+                                                                th:data-usuario="${usuario.idUsuario}"
+                                                                th:data-pokemon="${fav.idPokemon}"></i>
+                                                   <h5 class="pokemon-name" th:text="${fav.pokemonData.name}"></h5>
+                                                    <!--                        <div class="mt-2">
+                                                                                <span class="badge badge-type bg-grass text-white"></span>
+                                                                            </div>-->
+                                                </div>  
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <br><br>
+                            </div>
+                        </di> 
+                    </div>
+                </div>
+            </div>
+        </div>
+
     </div>
 </html>

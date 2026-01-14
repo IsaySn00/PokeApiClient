@@ -1,5 +1,8 @@
 package com.digis01.PokeApiClient.Controller;
 
+import com.digis01.PokeApiClient.ML.Favorito;
+import com.digis01.PokeApiClient.ML.Pokemon;
+import com.digis01.PokeApiClient.ML.PokemonDetail;
 import com.digis01.PokeApiClient.ML.Result;
 import com.digis01.PokeApiClient.ML.Rol;
 import com.digis01.PokeApiClient.ML.Usuario;
@@ -26,6 +29,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import tools.jackson.databind.DeserializationFeature;
+import tools.jackson.databind.ObjectMapper;
 
 @Controller
 @RequestMapping("/usuario")
@@ -100,8 +105,26 @@ public class UsuarioController {
                 new ParameterizedTypeReference<Result<Usuario>>() {
         });
 
-        Result result = responseEntity.getBody();
-        model.addAttribute("usuario", result.object);
+        //Result result = responseEntity.getBody();
+        Usuario usuario = responseEntity.getBody().object;
+        if (usuario != null && usuario.getFavoritos() != null) {
+            for (Favorito fav : usuario.getFavoritos()) {
+                try {
+                    // Consultamos la API externa usando el ID guardado
+                    String pokeUrl = "https://pokeapi.co/api/v2/pokemon/" + fav.getIdPokemon() + "/";
+                    Pokemon pokeInfo = restTemplate.getForObject(pokeUrl, Pokemon.class);
+                    fav.setPokemonData(pokeInfo); // Guardamos la info completa en el objeto
+                } catch (org.springframework.web.client.HttpClientErrorException e) {
+                    // En caso de que un ID de pokemon no exista o la API falle
+                    System.out.println("Error 404 o 400: El ID " + fav.getIdPokemon() + " no existe en PokeAPI");
+                } catch (org.springframework.web.client.RestClientException e) {
+                    System.out.println("Error de Mapeo: Revisa que Pokemon.class tenga @JsonIgnoreProperties");
+                    e.printStackTrace(); // Esto te dirá exactamente qué campo sobra o falta
+                }
+            }
+        }
+
+        model.addAttribute("usuario", usuario);
 
         return "detailUsuario";
     }
