@@ -69,15 +69,15 @@ public class UsuarioController {
         HttpEntity entity = new HttpEntity<>(usuario, httpHeader);
 
         ResponseEntity<Result> responseEntity = restTemplate.exchange(
-                urlBase + "usuario",
+                urlBase + "usuario/add",
                 HttpMethod.POST,
                 entity,
                 Result.class);
 
-        redirectAttributes.addFlashAttribute("sucess", "EL usuario" + usuario.getUserName() + "Se creo con exito");
+        redirectAttributes.addFlashAttribute("success", "EL usuario" + usuario.getUserName() + "Se creo con exito");
         redirectAttributes.addFlashAttribute("icon", "success");
 
-        return "redirect:/pokemon";
+        return "redirect:/usuario/login";
     }
     
     @GetMapping("/recuperarPassword")

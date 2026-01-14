@@ -146,6 +146,12 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/html.html to edit this temp
                 </div>
             </div>
         </div>
+        <script th:if="${success}" th:inline="javascript">
+            Swal.fire({
+            icon: [[${icon}]],
+                    title: [[${$success}]],
+            });
+        </script>
         <script>
             function enviarCorreoRecuperacion() {
                 const email = $("#emailRecuperacion").val().trim();
