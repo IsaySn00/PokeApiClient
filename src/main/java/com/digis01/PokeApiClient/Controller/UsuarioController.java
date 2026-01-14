@@ -85,7 +85,7 @@ public class UsuarioController {
         return "recuperacionPassword";
     }
 
-    @GetMapping("/detalle/{id}")
+    @GetMapping("/{id}")
     public String GetDetailUsuario(@PathVariable("id") int id, Model model, HttpSession session) {
 
         RestTemplate restTemplate = new RestTemplate();
