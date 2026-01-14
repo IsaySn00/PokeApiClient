@@ -74,8 +74,13 @@ public class UsuarioController {
 
         return "redirect:/pokemon";
     }
+    
+    @GetMapping("/recuperarPassword")
+    public String RecuperarPassword(@RequestParam(value = "token", required = true) String token){
+        return "recuperacionPassword";
+    }
 
-    @GetMapping("/{id}")
+    @GetMapping("/detalle/{id}")
     public String GetDetailUsuario(@PathVariable("id") int id, Model model, HttpSession session) {
 
         RestTemplate restTemplate = new RestTemplate();
@@ -223,4 +228,6 @@ public class UsuarioController {
 
         return "redirect:/usuario/" + usuario.getIdUsuario();
     }
+    
+   
 }
