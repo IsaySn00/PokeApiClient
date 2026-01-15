@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<!--
+Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+Click nbfs://nbhost/SystemFileSystem/Templates/Other/html.html to edit this template
+-->
+<html xmlns:th="http://thymeleaf.org">
+    <head>
+        <title>TODO supply a title</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+        <style>
+            :root {
+                --poke-red: #ff3e3e;
+                --text-dark: #2c3e50;
+                --bg-light: #f4f4f7;
+            }
+
+            body {
+                background-color: var(--bg-light);
+                font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+                min-height: 100vh;
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+            }
+
+            .error-container {
+                max-width: 600px;
+                margin: auto;
+                text-align: center;
+                padding: 40px 20px;
+            }
+
+            .pokemon-img {
+                width: 100%;
+                max-width: 350px;
+                height: auto;
+                animation: sleepFloat 4s ease-in-out infinite;
+                filter: drop-shadow(0 10px 15px rgba(0,0,0,0.1));
+            }
+
+            .error-code {
+                font-size: 8rem;
+                font-weight: 900;
+                color: var(--poke-red);
+                line-height: 1;
+                margin-bottom: -20px;
+                position: relative;
+                z-index: -1;
+                opacity: 0.1;
+            }
+
+            .error-title {
+                font-size: 2.5rem;
+                font-weight: 800;
+                color: var(--text-dark);
+                margin-top: 20px;
+            }
+
+            .error-message {
+                font-size: 1.2rem;
+                color: #6c757d;
+                margin-bottom: 30px;
+            }
+
+            .btn-pokedex {
+                background-color: var(--poke-red);
+                color: white;
+                border: none;
+                padding: 12px 30px;
+                font-weight: 700;
+                border-radius: 50px;
+                font-size: 1.1rem;
+                transition: all 0.3s;
+                box-shadow: 0 4px 15px rgba(255, 62, 62, 0.3);
+            }
+
+            .btn-pokedex:hover {
+                background-color: #d63030;
+                transform: translateY(-3px);
+                color: white;
+                box-shadow: 0 8px 20px rgba(255, 62, 62, 0.4);
+            }
+
+            .os-footer {
+                position: fixed;
+                bottom: 20px;
+                width: 100%;
+                text-align: center;
+                font-size: 0.8rem;
+                color: #a0aec0;
+            }
+
+            @keyframes sleepFloat {
+                0%, 100% {
+                    transform: translateY(0);
+                }
+                50% {
+                    transform: translateY(-10px);
+                }
+            }
+
+        </style>
+    </head>
+    <body>
+        <div class="container">
+            <div class="error-container">
+
+                <div class="mb-4 position-relative">
+                    <div class="error-code" th:text="${code}"></div>
+                    <img th:src="${image}" alt="poke-image" class="pokemon-img">
+                </div>
+
+                <h1 class="error-title" th:text="${message}"></h1>
+                <p class="error-message" th:text="${desc}"></p>
+
+                <button type="button" class="btn btn-pokedex">
+                    <i class="bi bi-arrow-left-circle me-2"></i> Regresar
+                </button>
+
+            </div>
+        </div>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+        <script>
+            $(".btn-pokedex").on("click", function () {
+                window.history.back();
+            });
+        </script>
+    </body>
+</html>
