@@ -252,5 +252,27 @@ public class UsuarioController {
         return "redirect:/usuario/" + usuario.getIdUsuario();
     }
     
-   
+   @PostMapping("/validarPassword")
+   public String ValidarPassword(@RequestParam("password")String password, RedirectAttributes redirectAttributes, HttpSession session){
+       String tkn = (String) session.getAttribute("tkn");
+
+        HttpHeaders headers = new HttpHeaders();
+
+        headers.setBearerAuth(tkn);
+
+        HttpEntity entity = new HttpEntity<>(headers);
+        
+        RestTemplate restTemplate = new RestTemplate();
+        ResponseEntity<Result> responseEntity = restTemplate.exchange(
+                urlBase + "usuario/validarPassword",
+                HttpMethod.POST,
+                entity,
+                Result.class);
+        
+        redirectAttributes.addFlashAttribute("successValidPassword", 
+                "Se ha enviado un código de verificación a tu correo");
+        
+        
+       return "redirect:/usuario";
+   }
 }
