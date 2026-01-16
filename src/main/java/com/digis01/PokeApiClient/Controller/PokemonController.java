@@ -2,6 +2,7 @@ package com.digis01.PokeApiClient.Controller;
 
 import com.digis01.PokeApiClient.ML.Pokemon;
 import com.digis01.PokeApiClient.ML.PokemonDetail;
+import com.digis01.PokeApiClient.ML.PokemonTipoDetail;
 import com.digis01.PokeApiClient.ML.Result;
 import jakarta.servlet.http.HttpSession;
 import java.util.ArrayList;
@@ -105,15 +106,49 @@ public class PokemonController {
 
         return "detail";
     }
+    
+    @GetMapping("/tipos")
+    public String GetTipos(HttpSession session, Model model){
+        
+        RestTemplate restTemplate = new RestTemplate();
+        
+        String tkn = (String) session.getAttribute("tkn");
+        
+        HttpHeaders headers = new HttpHeaders();
+        
+        headers.setBearerAuth(tkn);
+        
+        HttpEntity entity = new HttpEntity<>(headers);
+                
+        ResponseEntity<Result<List<PokemonTipoDetail>>> responseEntity = restTemplate.exchange(
+                urlBase + "/tipos",
+                HttpMethod.GET,
+                entity,
+                new ParameterizedTypeReference<Result<List<PokemonTipoDetail>>>(){});
+        
+        Result<List<PokemonTipoDetail>> result = responseEntity.getBody();
+        
+        model.addAttribute("tipos", result.object);
+        
+        return "tiposPokemon";
+    }
 
     @GetMapping("/realizar-busqueda")
-    public String Buscador(@RequestParam("name") String name, Model model) {
+    public String Buscador(@RequestParam("name") String name, Model model, HttpSession session) {
         RestTemplate restTemplate = new RestTemplate();
+        
+        String tkn = (String) session.getAttribute("tkn");
+        
+        HttpHeaders headers = new HttpHeaders();
+        
+        headers.setBearerAuth(tkn);
+        
+        HttpEntity entity = new HttpEntity<>(headers);
 
         ResponseEntity<Result<Map<String, Object>>> responseEntity = restTemplate.exchange(
                 urlBase + "/buscador?name=" + name,
                 HttpMethod.GET,
-                HttpEntity.EMPTY,
+                entity,
                 new ParameterizedTypeReference<Result<Map<String, Object>>>() {
         });
 

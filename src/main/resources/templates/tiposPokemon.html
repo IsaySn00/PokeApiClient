@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" 
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout}">
+    <div class="container mt-4 pb-5" layout:fragment="contenido">
+        <style>
+            .type-card {
+                border: none;
+                border-radius: 20px;
+                overflow: hidden;
+                position: relative;
+                cursor: pointer;
+                transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+                height: 120px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+            }
+
+            .type-card:hover {
+                transform: translateY(-5px) scale(1.02);
+                box-shadow: 0 10px 20px rgba(0,0,0,0.15);
+                z-index: 2;
+            }
+
+            .type-name {
+                font-size: 1.5rem;
+                font-weight: 800;
+                color: white;
+                text-transform: uppercase;
+                letter-spacing: 2px;
+                z-index: 2;
+                text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+            }
+
+            .type-icon-bg {
+                position: absolute;
+                right: -20px;
+                bottom: -20px;
+                font-size: 6rem;
+                color: white;
+                opacity: 0.2;
+                transform: rotate(-15deg);
+                z-index: 1;
+                transition: transform 0.3s;
+            }
+            .type-card:hover .type-icon-bg {
+                transform: rotate(0deg) scale(1.1);
+            }
+
+            .offcanvas {
+                border-top-left-radius: 20px;
+                border-bottom-left-radius: 20px;
+            }
+
+            .offcanvas-header {
+                color: white;
+            }
+
+            .pokemon-list-item {
+                display: flex;
+                align-items: center;
+                background: white;
+                padding: 10px;
+                border-radius: 12px;
+                margin-bottom: 10px;
+                box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+                transition: transform 0.2s;
+                text-decoration: none;
+                color: #333;
+                border: 1px solid transparent;
+            }
+            .pokemon-list-item:hover {
+                transform: translateX(5px);
+                border-color: #ddd;
+                background: #fafafa;
+            }
+            .mini-img {
+                width: 50px;
+                height: 50px;
+                margin-right: 15px;
+            }
+            .poke-number {
+                font-size: 0.8rem;
+                color: #aaa;
+                font-weight: 700;
+            }
+        </style>
+        <div class="row mb-4">
+            <div class="col-12 text-center">
+                <h2 class="fw-bold text-secondary">Tipos Elementales</h2>
+                <p class="text-muted">Selecciona un tipo para ver los Pokémon asociados</p>
+            </div>
+        </div>
+
+        <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-4">
+
+            <div class="col" th:each="tipo : ${tipos}">
+                <input type="hidden">
+                <div class="type-card" th:style="'background: linear-gradient(135deg,' + ${tipo.color} + ')'" th:attr="data-name=${tipo.name}, data-color=${tipo.color}, data-id=${tipo.id}"  onclick="openType(this)">
+                    <span class="type-name" th:text="${tipo.name}"></span>
+                    <!--                    <i class="bi bi-fire type-icon-bg"></i>-->
+                </div>
+            </div>
+            <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasType" aria-labelledby="offcanvasTypeLabel">
+
+                <div class="offcanvas-header" id="offcanvasHeader">
+                    <h5 class="offcanvas-title fw-bold text-uppercase" id="offcanvasTypeLabel">Tipo</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+                </div>
+
+                <div class="offcanvas-body bg-light">
+                    <p class="text-muted small mb-3">Mostrando Pokémon destacados de este tipo:</p>
+
+                    <div id="pokemonListContainer">
+                    </div>
+
+                </div>
+            </div>
+        </div>
+        <script th:inline="javascript">
+            function openType(element) {
+                const name = element.dataset.name;
+                const color = element.dataset.color;
+                const id = element.dataset.id;
+
+                const title = $("#offcanvasTypeLabel");
+                const container = $("#pokemonListContainer");
+
+                $("#offcanvasHeader").css('background', `linear-gradient(135deg, ${color}`);
+                title.textContent = 'Tipo ' + name;
+                container.innerHTML = '<div class="text-center">Cargando...</div>';
+                container.empty();
+
+                $.ajax({
+                    url: `http://localhost:8080/api/pokemon/tipo?idType=${id}`,
+                    headers: {"Authorization": "Bearer " + /*[[${session.tkn}]]*/ ''},
+                    type: "GET",
+                    success: function (data) {
+
+                        if (data.length === 0) {
+                            container.html(
+                                    `<div class="alert alert-warning">No hay Pokémon para este tipo</div>`
+                                    );
+                            return;
+                        }
+
+                        $.each(data.object, function (i, p) {
+                            container.append(`
+                            <a href="/pokemon/detail/${p.id}" class="pokemon-list-item">
+                            <img src="${p.imageUrl}" class="mini-img" alt="${p.name}">
+                            <div class="flex-grow-1">
+                                <div class="fw-bold text-capitalize">${p.name}</div>
+                            </div>
+                            <i class="bi bi-chevron-right text-muted"></i>
+                        </a>
+                        `);
+                        });
+                    },
+                    error: function (jqXHR, textStatus, errorThrown) {
+                        $('#pokemonListContainer').html(
+                                `<div class="alert alert-danger">Error al cargar los Pokémon</div>`
+                                );
+                    }
+
+                })
+
+                const offcanvas = new bootstrap.Offcanvas('#offcanvasType');
+                offcanvas.show();
+            }
+        </script>
+    </div>
+</html>
