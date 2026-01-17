@@ -77,7 +77,7 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/html.html to edit this temp
                 z-index: 1;
                 position: relative;
                 filter: drop-shadow(0 15px 20px rgba(0,0,0,0.15));
-                transition: transform 0.3s;
+                transition: opacity 0.3s ease, transform 0.3s ease;
             }
             .card-identity:hover .pokemon-img {
                 transform: scale(1.05) rotate(3deg);
@@ -225,9 +225,15 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/html.html to edit this temp
         <div class="row g-4">
 
             <div class="col-lg-4">
+
                 <div class="card-identity d-flex flex-column justify-content-center align-items-center">
-<!--                    <div class="bg-circle"></div>-->
-                    <img th:src="${pokemon.sprites.front_default}" alt="poke" class="pokemon-img">
+                    <div class="row mb-auto ms-auto">
+                        <button  id="btnShiny" class="col align-self-end btn btn-outline-info">
+                            <i class="bi bi-stars"></i>
+                        </button>
+                    </div>
+                    <!--                    <div class="bg-circle"></div>-->
+                    <img th:src="${pokemon.sprites.front_default}" th:attr="data-normal=${pokemon.sprites.front_default}, data-shiny=${pokemon.sprites.front_shiny}" alt="poke" class="pokemon-img" id="pokemonImage">
 
                     <div class="row w-100 mt-4 text-center">
                         <div class="col-6 border-end">
@@ -323,7 +329,7 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/html.html to edit this temp
         </div> 
         <script th:inline="javascript">
             $(".btn-fav").on("click", function () {
-                
+
                 const btn = $(this);
                 let idUsuario = /*[[${session.id}]]*/ '';
                 let idPoke = $(".idPoke").val();
@@ -331,11 +337,11 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/html.html to edit this temp
                 const fav = {
                     idPokemon: idPoke
                 }
-                
-                const url = !isActive 
+
+                const url = !isActive
                         ? `http://localhost:8080/api/favorito?idUsuario=${idUsuario}&idPokemon=${idPoke}`
                         : `http://localhost:8080/api/favorito?idUsuario=${idUsuario}`;
-                        
+
                 const method = !isActive ? "DELETE" : "POST";
                 const data = !isActive ? null : JSON.stringify(fav);
 
@@ -363,6 +369,27 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/html.html to edit this temp
                         });
                     }
                 })
+            });
+
+            $("#btnShiny").on("click", function () {
+
+                const img = $("#pokemonImage");
+
+
+                const normal = img.data("normal");
+                const shiny = img.data("shiny");
+
+                const isShiny = img.attr("src") === shiny;
+
+                if (isShiny) {
+                    img.attr("src", normal);
+                    $(this).addClass("btn-outline-info");
+                    $(this).removeClass("btn-info");
+                } else {
+                    img.attr("src", shiny);
+                    $(this).removeClass("btn-outline-info")
+                    $(this).addClass("btn-info")
+                }
             });
         </script>
     </div> 
