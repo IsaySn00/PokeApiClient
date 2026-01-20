@@ -50,6 +50,8 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/html.html to edit this temp
         </style>
 
         <script>
+
+
             function SoloLetras(event, input) {
                 let value = event.key;
                 //let RegExp = /^[a-zA-ZñÑ]+(\s{1}[a-zA-ZñÑ]+)*$/;
@@ -109,7 +111,8 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/html.html to edit this temp
 
             function ValidarPassword(input) {
 
-                let value = $("#" + input.id).val();
+                var value = $("#" + input.id).val();
+                //let value = $(input).val() || "";
                 var mensajeDescriptivo = "";
 
                 if (!/[A-Z]/.test(value)) {
@@ -137,6 +140,70 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/html.html to edit this temp
                 }
             }
 
+
+            $(document).ready(function () {
+                $('#btnRegistrarUsuario').on('click', function (e) {
+                    e.preventDefault(); // Evita el envío automático si es un botón submit
+                    
+                    SoloLetras(event);
+                    SoloNumeros(event);
+                    ValidarUsername(event);
+                    ValidarEmail(this);
+                    ValidarPassword(this);
+                    
+                    // verificar si hay mensajes de error visibles
+                    let errores = $('.error-msg:visible').filter(function(){
+                        return $(this).text().trim() !== "";
+                    }).length;
+
+                    // 2. Lógica de validación
+                    if (errores > 0) {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Campos inválidos',
+                            text: 'Por favor, corrige los errores.'
+                        });
+                    } else {
+                        //realizar la petición AJAX
+                        registrarUsuario();
+                    }
+                });
+                
+                function registrarUsuario(){
+                    const datosFormulario = $("#formRegistro").serialize();
+                    
+                    $.ajax({
+                        url:"http://localhost:8080/api/usuario/add",
+                        type:"POST",
+                        data:datosFormulario,
+                        success: function(response){
+                            Swal.fire({
+                                icon: "success",
+                                title:"¡Registro éxitoso!",
+                                text:"El usuario ha sido registrado con éxito.",
+                                confirmButtonText: "Aceptar"
+                            }).then(()=> {
+                                //limpiar formulario
+                                $("#formRegistro")[0].reset();
+                            });
+                        },
+                        error: function(xhr, status, error){
+                            let mensajeError = "Hubo un problema con la conexión";
+                            
+                            if(xhr.responseJSON && xhr.responseJSON.message){
+                                mensajeError = xhr.responseJSON.message;
+                            }
+                            Swal.fire({
+                                icon:"error",
+                                title: "Error en el registro",
+                                text:mensajeError
+                            });
+                        }
+                    });
+                }
+                
+            });
+
         </script>
 
         <div class="row justify-content-center mt-3">
@@ -147,7 +214,7 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/html.html to edit this temp
                     </div>
 
                     <div class="card-body p-4 p-md-5">
-                        <form method="post" th:object="${usuario}" th:action="@{add}">
+                        <form method="post" th:object="${usuario}" th:action="@{add}" id="formRegistro">
                             <h5 class="text-muted mb-3 fs-6 text-uppercase ls-1">Datos personales</h5>
 
                             <div class="row g-3 mb-3">
@@ -206,7 +273,7 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/html.html to edit this temp
                                 </div>
                                 <div class="col-md-6">
                                     <div class="form-floating">
-                                        <input type="password" th:field="*{passwordUsuario}" class="form-control" id="password" placeholder="Contraseña" onkeypress="ValidarPassword(this)" required>
+                                        <input type="password" th:field="*{passwordUsuario}" class="form-control" id="password" placeholder="Contraseña" onblur="ValidarPassword(this)" required>
                                         <label for="email">Contraseña</label>
                                         <span class="error-msg text-danger" id="icon"></span>
                                     </div>
@@ -214,7 +281,7 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/html.html to edit this temp
                             </div>
 
                             <div class="d-grip gap-2">
-                                <button type="submit" class="btn btn-primary btn-register btn-lg text-white rounded-pill shadow-sm">
+                                <button type="submit" class="btn btn-primary btn-register btn-lg text-white rounded-pill shadow-sm" id="btnRegistrarUsuario">
                                     Registrarse
                                 </button>
                             </div>

@@ -12,53 +12,50 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/html.html to edit this temp
             title: [[${successMessage}]],
                     icon: [[${iconModal}]]
             });
-
         </script>
         <script th:inline="javascript">
-          $(document).ready(function(){
-              
-                $(".btnEliminar").click(function () {
-                    console.log(this);
-                    //const idUsuario = $(this).data("usuario");
-                    const idPokemon = $(this).data("pokemon");
-                    const cardEliminar = $(this).closest(".col");
-                    let idUsuario = /*[[${session.id}]]*/ '';
-                    
-                    Swal.fire({
-                        title: "¿Desea quitarlo de favoritos?",
-                        icon: "warning",
-                        showCancelButton: true,
-                        confirmButtonColor: "#3085d6",
-                        cancelButtonColor: "#d33",
-                        confirmButtonText: "Si, eliminar"
-                    }).then((result) => {
-                        if (result.isConfirmed) {
-                            $.ajax({
-                                type: "DELETE",
-                                url: "http://localhost:8080/api/favorito",
-                                headers: {"Authorization": "Bearer " + /*[[${session.tkn}]]*/ ''},
-                                data:{
-                                    idUsuario: idUsuario,
-                                    idPokemon: idPokemon
-                                },
-                                success: function (data) {
-                                    Swal.fire("Eliminado!", "El pokemon se eliminó de favoritos", "success").then(() => {
-                                        location.reload();
-                                    });
-                                    elementoAEliminar.fadeOut(500, function() {
-                                    $(this).remove();
-                                    });
-                                },
-                                error: function (xhr, status, error) {
-                                    Swal.fire("Error", "Ha ocurrido un error al eliminar el pokemon de favoritos", "error");
-                                }
-                            });
-                        }
+            $(document).ready(function(){
 
+            $(".btnEliminar").click(function () {
+            console.log(this);
+            //const idUsuario = $(this).data("usuario");
+            const idPokemon = $(this).data("pokemon");
+            const cardEliminar = $(this).closest(".col");
+            let idUsuario = /*[[${session.id}]]*/ '';
+            Swal.fire({
+            title: "¿Desea quitarlo de favoritos?",
+                    icon: "warning",
+                    showCancelButton: true,
+                    confirmButtonColor: "#3085d6",
+                    cancelButtonColor: "#d33",
+                    confirmButtonText: "Si, eliminar"
+            }).then((result) => {
+            if (result.isConfirmed) {
+            $.ajax({
+            type: "DELETE",
+                    url: "http://localhost:8080/api/favorito",
+                    headers: {"Authorization": "Bearer " + /*[[${session.tkn}]]*/ ''},
+                    data:{
+                    idUsuario: idUsuario,
+                            idPokemon: idPokemon
+                    },
+                    success: function (data) {
+                    Swal.fire("Eliminado!", "El pokemon se eliminó de favoritos", "success").then(() => {
+                    location.reload();
                     });
-                
-            });  
-        });
+                    elementoAEliminar.fadeOut(500, function() {
+                    $(this).remove();
+                    });
+                    },
+                    error: function (xhr, status, error) {
+                    Swal.fire("Error", "Ha ocurrido un error al eliminar el pokemon de favoritos", "error");
+                    }
+            });
+            }
+
+            });
+            });
+            });
         </script>
         <style>
             .profile-card{
@@ -115,7 +112,7 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/html.html to edit this temp
                 border-radius: 50px;
                 padding: 8px 25px;
             }
-            
+
             .pokemon-card{
                 border:none;
                 border-radius: 15px;
@@ -162,7 +159,7 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/html.html to edit this temp
                 text-transform: capitalize;
                 margin-bottom: 5px;
             }
-            
+
             .btn-fav {
                 border: 2px solid #e0e0e0;
                 background: white;
@@ -177,18 +174,18 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/html.html to edit this temp
                 cursor: pointer;
                 transition: all 0.3s;
             }
-            
+
             .btn-fav.active {
                 background-color: #ff4757;
                 color: white;
                 align-items: center;
             }
-            
+
             .input-container {
-            position: relative; /* Para posicionar el icono respecto a este contenedor */
-            width: 300px;
+                position: relative; /* Para posicionar el icono respecto a este contenedor */
+                width: 300px;
             }
-            
+
             .correct{
                 border-color: green;
             }
@@ -197,97 +194,102 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/html.html to edit this temp
                 border-color: red;
             }
         </style>
-        
+
         <script>
             function SoloLetras(event, input) {
-                let value = event.key;
-                //let RegExp = /^[a-zA-ZñÑ]+(\s{1}[a-zA-ZñÑ]+)*$/;
-                let RegExp = /^[ a-zA-ZñÑ\-\'\u00C0-\u017F]+$/;
-
-                if (RegExp.test(value)) {
-                    $(input).removeClass("error").addClass("correct");
-                    $(input).siblings(".error-msg").text("");
-                } else {
-                    $(input).removeClass("correct").addClass("error");
-                    $(input).siblings(".error-msg").text("El campo solo permite letras");
-                    event.preventDefault();
-                }
+            let value = event.key;
+            //let RegExp = /^[a-zA-ZñÑ]+(\s{1}[a-zA-ZñÑ]+)*$/;
+            let RegExp = /^[ a-zA-ZñÑ\-\'\u00C0-\u017F]+$/;
+            if (RegExp.test(value)) {
+            $(input).removeClass("error").addClass("correct");
+            $(input).siblings(".error-msg").text("");
+            } else {
+            $(input).removeClass("correct").addClass("error");
+            $(input).siblings(".error-msg").text("El campo solo permite letras");
+            event.preventDefault();
+            }
             }
 
             function SoloNumeros(event, input) {
-                let value = event.key;
-                let RegExp = /^[0-9]+$/;
-
-                if (RegExp.test(value)) {
-                    $(input).removeClass("error").addClass("correct");
-                    $(input).siblings(".error-msg").text("");
-                } else {
-                    $(input).removeClass("correct").addClass("error");
-                    $(input).siblings(".error-msg").text("El campo solo permite números");
-                    event.preventDefault();
-                }
+            let value = event.key;
+            let RegExp = /^[0-9]+$/;
+            if (RegExp.test(value)) {
+            $(input).removeClass("error").addClass("correct");
+            $(input).siblings(".error-msg").text("");
+            } else {
+            $(input).removeClass("correct").addClass("error");
+            $(input).siblings(".error-msg").text("El campo solo permite números");
+            event.preventDefault();
+            }
             }
 
             function ValidarUsername(event, input) {
-                let value = event.key;
-                let RegExp = /^[a-z0-9_]+$/i;
-
-                if (RegExp.test(value)) {
-                    $(input).removeClass("error").addClass("correct");
-                    $(input).siblings(".error-msg").text("");
-                } else {
-                    $(input).removeClass("correct").addClass("error");
-                    $(input).siblings(".error-msg").text("El campo solo permite guión bajo (_)");
-                    event.preventDefault();
-                }
+            let value = event.key;
+            let RegExp = /^[a-z0-9_]+$/i;
+            if (RegExp.test(value)) {
+            $(input).removeClass("error").addClass("correct");
+            $(input).siblings(".error-msg").text("");
+            } else {
+            $(input).removeClass("correct").addClass("error");
+            $(input).siblings(".error-msg").text("El campo solo permite guión bajo (_)");
+            event.preventDefault();
+            }
             }
 
             function ValidarEmail(input) {
 
-                let value = $("#" + input.id).val();
-                let RegExp = /^(([^<>()[\]\.,;:\s@\"]+(\.[^<>()[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/;
-
-                if (RegExp.test(value)) {
-                    $(input).removeClass("error").addClass("correct");
-                    $(input).siblings(".error-msg").text("");
-                } else {
-                    $(input).removeClass("correct").addClass("error");
-                    $(input).siblings(".error-msg").text("La dirección de email es incorrecta");
-                }
+            let value = $("#" + input.id).val();
+            let RegExp = /^(([^<>()[\]\.,;:\s@\"]+(\.[^<>()[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/;
+            if (RegExp.test(value)) {
+            $(input).removeClass("error").addClass("correct");
+            $(input).siblings(".error-msg").text("");
+            } else {
+            $(input).removeClass("correct").addClass("error");
+            $(input).siblings(".error-msg").text("La dirección de email es incorrecta");
+            }
             }
 
             function ValidarPassword(input) {
 
-                let value = $("#" + input.id).val();
-                var mensajeDescriptivo = "";
+            let value = $("#" + input.id).val();
+            var mensajeDescriptivo = "";
+            if (!/[A-Z]/.test(value)) {
+            mensajeDescriptivo = mensajeDescriptivo + " Al menos una letra mayuscula. ";
+            }
+            if (!/[a-z]/.test(value)) {
+            mensajeDescriptivo = mensajeDescriptivo + " Al menos una letra minuscula. ";
+            }
+            if (!/[0-9]/.test(value)) {
+            mensajeDescriptivo = mensajeDescriptivo + " Al menos un número. ";
+            }
+            if (!/[*@!#%&()^~{}]+/.test(value)) {
+            mensajeDescriptivo = mensajeDescriptivo + " Al menos un carácter especial. ";
+            }
+            if (value.length < 8) {
+            mensajeDescriptivo = mensajeDescriptivo + " Mínimo 8 caracteres. ";
+            }
 
-                if (!/[A-Z]/.test(value)) {
-                    mensajeDescriptivo = mensajeDescriptivo + " Al menos una letra mayuscula. ";
-                }
-                if (!/[a-z]/.test(value)) {
-                    mensajeDescriptivo = mensajeDescriptivo + " Al menos una letra minuscula. ";
-                }
-                if (!/[0-9]/.test(value)) {
-                    mensajeDescriptivo = mensajeDescriptivo + " Al menos un número. ";
-                }
-                if (!/[*@!#%&()^~{}]+/.test(value)) {
-                    mensajeDescriptivo = mensajeDescriptivo + " Al menos un carácter especial. ";
-                }
-                if (value.length < 8) {
-                    mensajeDescriptivo = mensajeDescriptivo + " Mínimo 8 caracteres. ";
-                }
-
-                if (mensajeDescriptivo.length > 0) {
-                    $(input).removeClass("correct").addClass("error");
-                    $(input).siblings(".error-msg").text(mensajeDescriptivo);
-                } else {
-                    $(input).removeClass("error").addClass("correct");
-                    $(input).siblings(".error-msg").text("");
-                }
+            if (mensajeDescriptivo.length > 0) {
+            $(input).removeClass("correct").addClass("error");
+            $(input).siblings(".error-msg").text(mensajeDescriptivo);
+            } else {
+            $(input).removeClass("error").addClass("correct");
+            $(input).siblings(".error-msg").text("");
+            }
             }
 
         </script>
-        
+        <script th:inline="javascript">
+            const successMsg = [[${success}]];
+            if (successMsg) {
+            Swal.fire({
+            icon: 'success',
+                    title: '¡Éxito!',
+                    text: successMsg
+            });
+            }
+        </script>
+
         <div class="row justify-content-center mt-3">
             <div class="col-lg-8">
                 <div class="card profile-card">
@@ -358,7 +360,7 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/html.html to edit this temp
                                                             <div class="form-floating">
                                                                 <input type="tel" class="form-control" id="editTelefono" th:field="*{telefonoUsuario}" placeholder="Teléfono" onkeypress="SoloNumeros(event, this)">
                                                                 <label for="editTelefono">Teléfono</label>
-                                                                 <span class="error-msg text-danger" id="icon"></span> 
+                                                                <span class="error-msg text-danger" id="icon"></span> 
                                                             </div>
                                                         </div>
                                                         <div class="col-md-6">
@@ -391,8 +393,8 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/html.html to edit this temp
                                         </div>
                                     </div>
                                 </div>
-                                
-                                
+
+
                                 <div class="modal fade" id="modalEditarContraseña" tabindex="-1" aria-labelledby="modalEditarLabel" aria-hidden="true">
                                     <div class="modal-dialog modal-lg modal-dialog-centered"> <div class="modal-content">
 
@@ -410,6 +412,7 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/html.html to edit this temp
                                                     <input type="hidden" th:field="*{idUsuario}"/>
                                                     <h6 class="text-muted text-uppercase small mb-3">Ingresa la contraseña actual</h6>
                                                     <div class="row g-3 mb-3">
+                                                        <form th:action="@{usuario/validarPassword}" method="POST">
                                                         <div class="col-md-6">
                                                             <div class="form-floating">
                                                                 <input type="password" class="form-control input-container" id="editPassword" placeholder="Contraseña" onkeypress="ValidarPassword(this)">
@@ -418,23 +421,24 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/html.html to edit this temp
                                                             </div>
                                                         </div>
                                                         <div class="col-md-6">
-                                                            <button type="submit" class="btn btn-outline-success">Validar</button>
+                                                                <button type="submit" class="btn btn-outline-success">Validar</button>
                                                         </div>
+                                                        </form>
                                                     </div>
 
                                                     <h6 class="text-muted text-uppercase small mb-3 mt-4">Ingresa el código que se envío a tu correo</h6>
                                                     <div class="row g-3 mb-3">
                                                         <div class="col-md-6">
                                                             <div class="form-floating">
-                                                                <input type="text" class="form-control" id="codigo" placeholder="Código" required="">
+                                                                <input type="text" class="form-control" id="codigo" placeholder="Código">
                                                                 <label for="Codigo">Código</label>
                                                             </div>
                                                         </div>
                                                         <div class="col-md-6">
-                                                                <button type="button" class="btn btn-outline-primary">Reenviar código de nuevo</button>
+                                                            <button type="button" class="btn btn-outline-primary">Reenviar código de nuevo</button>
                                                         </div>
                                                     </div>
-                                                    
+
                                                     <h6 class="text-muted text-uppercase small mb-3 mt-4" hidden="true">Ingresa la nueva contraseña</h6>
                                                     <div class="row g-3 mb-3">
                                                         <div class="col-md-6">
@@ -452,7 +456,7 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/html.html to edit this temp
                                                             </div>
                                                         </div>
                                                     </div>
-                                                    
+
                                                 </div>
 
                                                 <div class="modal-footer bg-light">
@@ -465,9 +469,9 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/html.html to edit this temp
                                         </div>
                                     </div>
                                 </div>
-                                
-                                
-                                
+
+
+
                             </div>
                             <div class="col-md-8 ps-md-5 pt-4 pt-md-0">
                                 <h5 class="mb-4 text-primary fw-bold"><i class="bi bi-card-heading"></i> Información del usuario</h5>
@@ -523,20 +527,20 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/html.html to edit this temp
                                                     <img class="pokemon-img" th:src="${fav.pokemonData.sprites.front_default}"  alt="imagen de pokémon"/>
                                                 </div>
                                             </a>
-                                                <div class="card-body">
-                                                    <p class="pokemon-id"></p>
-                                                    <i class="bi bi-heart-fill btn-fav active btnEliminar"
-                                                                th:data-usuario="${usuario.idUsuario}"
-                                                                th:data-pokemon="${fav.idPokemon}"></i>
-                                                   <h5 class="pokemon-name" th:text="${fav.pokemonData.name}"></h5>
-                                                    <!--                        <div class="mt-2">
-                                                                                <span class="badge badge-type bg-grass text-white"></span>
-                                                                            </div>-->
-                                                </div>  
+                                            <div class="card-body">
+                                                <p class="pokemon-id"></p>
+                                                <i class="bi bi-heart-fill btn-fav active btnEliminar"
+                                                   th:data-usuario="${usuario.idUsuario}"
+                                                   th:data-pokemon="${fav.idPokemon}"></i>
+                                                <h5 class="pokemon-name" th:text="${fav.pokemonData.name}"></h5>
+                                                <!--                        <div class="mt-2">
+                                                                            <span class="badge badge-type bg-grass text-white"></span>
+                                                                        </div>-->
+                                            </div>  
                                         </div>
                                     </div>
                                 </div>
-                                
+
                                 <br><br>
                             </div>
                         </di> 
