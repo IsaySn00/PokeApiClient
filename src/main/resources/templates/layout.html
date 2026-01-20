@@ -37,7 +37,7 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/html.html to edit this temp
             .user-avatar-container {
                 position: relative;
                 padding: 2px;
-                background-color: rgba(255, 255, 255, 0.2); 
+                background-color: rgba(255, 255, 255, 0.2);
                 border-radius: 50%;
                 transition: transform 0.2s;
             }
@@ -61,8 +61,8 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/html.html to edit this temp
                 right: 0;
                 width: 12px;
                 height: 12px;
-                background-color: #2ecc71; 
-                border: 2px solid #ff3e3e; 
+                background-color: #2ecc71;
+                border: 2px solid #ff3e3e;
                 border-radius: 50%;
             }
 
@@ -75,7 +75,7 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/html.html to edit this temp
             }
 
             .dropdown-menu {
-                border-radius: 15px; 
+                border-radius: 15px;
                 overflow: hidden;
                 min-width: 220px;
             }
@@ -87,7 +87,7 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/html.html to edit this temp
 
             .dropdown-item:hover {
                 background-color: #f8f9fa;
-                transform: translateX(5px); 
+                transform: translateX(5px);
             }
 
             .animate-menu {
@@ -118,7 +118,6 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/html.html to edit this temp
 
                         <div class="text-end me-2 d-none d-md-block">
                             <span class="d-block fw-bold small">Ash Ketchum</span>
-                            <span class="d-block x-small opacity-75">Entrenador</span>
                         </div>
 
                         <div class="user-avatar-container">
@@ -146,9 +145,11 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/html.html to edit this temp
                         </li>
                         <li><hr class="dropdown-divider"></li>
                         <li>
-                            <a class="dropdown-item py-2 text-danger fw-semibold" href="login.html">
-                                <i class="bi bi-box-arrow-right me-2"></i> Cerrar sesión
-                            </a>
+                            <form th:action="@{/usuario/logoutUsuario}" method="POST">
+                                <button type="submit" class="dropdown-item py-2 text-danger fw-semibold" id="logoutBtn">
+                                    <i class="bi bi-box-arrow-right me-2"></i> Cerrar sesión
+                                </button>
+                            </form>
                         </li>
                     </ul>
                 </div>

@@ -79,9 +79,9 @@ public class UsuarioController {
 
         return "redirect:/usuario/login";
     }
-    
+
     @GetMapping("/recuperarPassword")
-    public String RecuperarPassword(@RequestParam(value = "token", required = true) String token){
+    public String RecuperarPassword(@RequestParam(value = "token", required = true) String token) {
         return "recuperacionPassword";
     }
 
@@ -174,6 +174,30 @@ public class UsuarioController {
             return "redirect:/usuario/login";
         }
     }
+    
+    @PostMapping("/logoutUsuario")
+    public String Logout(HttpSession session) {
+
+        String token = (String) session.getAttribute("tkn");
+        RestTemplate restTemplate = new RestTemplate();
+
+        HttpHeaders headers = new HttpHeaders();
+
+        headers.setBearerAuth(token);
+
+        HttpEntity entity = new HttpEntity<>(headers);
+
+        ResponseEntity<Result> responseEntity = restTemplate.exchange(
+                urlBase + "auth/logout",
+                HttpMethod.POST,
+                entity,
+                Result.class);
+
+        session.invalidate();
+
+        return "redirect:/usuario/login";
+
+    }
 
     @GetMapping()
     public String GetAllUsuario(Model model, HttpSession session) {
@@ -251,6 +275,6 @@ public class UsuarioController {
 
         return "redirect:/usuario/" + usuario.getIdUsuario();
     }
+
     
-   
 }
